@@ -1,0 +1,39 @@
+{
+    "defaultRest" : 60,
+    "lastRest" : true,
+    "imperial" : false,
+    "weights": [
+        {
+            "id" : "1-0",
+            "name" : "Distensioni Bilanciere Panca Piana"
+        },
+        {
+            "id" : "1-1",
+            "name" : "Distensioni Manubri Panca Piana"
+        },
+        {
+            "id" : "1-2",
+            "name" : "Chest Press"
+        },
+        {
+            "id" : "1-3",
+            "name" : "Pectoral"
+        },
+        {
+            "id" : "1-4",
+            "name" : "Chest Press Tricipiti"
+        },
+        {
+            "id" : "1-5",
+            "name" : "French Press a una mano"
+        },
+        {
+            "id" : "1-6",
+            "name" : "French Press Panca Piana"
+        },
+        {
+            "id" : "1-7",
+            "name" : "Push Down"
+        }
+    ]
+}
