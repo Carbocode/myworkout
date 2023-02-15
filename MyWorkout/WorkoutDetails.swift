@@ -89,7 +89,7 @@ struct WorkoutDetails: View {
                     //Pulsante di inizio workout
                     HStack{
                         Spacer()
-                        Button(action: {}){
+                        Button(action: appData.Save){
                             Image(systemName: "figure.mixed.cardio")
                             Text("Inizia Workout")
                             Image(systemName: "figure.strengthtraining.functional")

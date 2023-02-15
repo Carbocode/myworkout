@@ -24,6 +24,7 @@ struct MainView: View {
                 }
         }
         .foregroundColor(.primary)
+        .tint(.accentColor)
     }
 }
 
