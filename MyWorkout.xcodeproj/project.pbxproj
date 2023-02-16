@@ -71,13 +71,8 @@
 		660475E5297002D20060BDA4 /* MyWorkout */ = {
 			isa = PBXGroup;
 			children = (
-				660475E6297002D20060BDA4 /* MyWorkoutApp.swift */,
 				66945279297F2915003EF2EF /* MainView.swift */,
-				660475E8297002D20060BDA4 /* ContentView.swift */,
-				66180B1929716F13007AD265 /* WorkoutDetails.swift */,
-				66180B1B29718A16007AD265 /* ExerciseDetails.swift */,
-				6694527B297F296A003EF2EF /* SettingsDetails.swift */,
-				66CFE92D297FD3C9007DCAD0 /* ExerciseList.swift */,
+				66845A38299E421900B63422 /* Views */,
 				66935292299BA5E500639B11 /* AppData.swift */,
 				66935290299BA3AD00639B11 /* Settings.swift */,
 				660475FC297035CC0060BDA4 /* settings.json */,
@@ -95,6 +90,19 @@
 				660475ED297002D30060BDA4 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		66845A38299E421900B63422 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				660475E8297002D20060BDA4 /* ContentView.swift */,
+				660475E6297002D20060BDA4 /* MyWorkoutApp.swift */,
+				66180B1929716F13007AD265 /* WorkoutDetails.swift */,
+				66180B1B29718A16007AD265 /* ExerciseDetails.swift */,
+				6694527B297F296A003EF2EF /* SettingsDetails.swift */,
+				66CFE92D297FD3C9007DCAD0 /* ExerciseList.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

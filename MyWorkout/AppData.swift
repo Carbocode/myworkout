@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 struct TextFile: FileDocument {
     static var readableContentTypes = [UTType.json]
 
-    // by default our document is empty
+    //Document content
     var text = ""
 
     // a simple initializer that creates new, empty documents
@@ -30,6 +30,10 @@ struct TextFile: FileDocument {
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         return FileWrapper(regularFileWithContents: Data(text.utf8))
     }
+    
+    func write(to fileWrapper: inout FileWrapper, contentType: UTType) throws {
+        fileWrapper = FileWrapper(regularFileWithContents: Data(text.utf8))
+    }
 }
 
 class AppData: ObservableObject {
@@ -39,6 +43,9 @@ class AppData: ObservableObject {
     var settingsFiles = TextFile()
     
     init(){
+        workoutFiles.text = Bundle.load("workouts")
+        settingsFiles.text = Bundle.load("settings")
+        
         if !workoutFiles.text.isEmpty{
             Workouts = Bundle.main.decode([Workout].self, from: workoutFiles)
         }else{
@@ -54,9 +61,27 @@ class AppData: ObservableObject {
         
     }
     
-    func Save(){
+    func SaveWorkouts(){
+        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let jsonURL = documentDirectory
+            .appendingPathComponent("workouts")
+            .appendingPathExtension("json")
+        print(jsonURL)
+        
         workoutFiles.text = Bundle.main.encode(Workouts)
+        
+        try? JSONEncoder().encode(Workouts).write(to: jsonURL, options: .atomic)
+    }
+    
+    func SaveSettings(){
+        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let jsonURL = documentDirectory
+            .appendingPathComponent("settings")
+            .appendingPathExtension("json")
+        
         settingsFiles.text = Bundle.main.encode(SettingsData)
+        
+        try? JSONEncoder().encode(SettingsData).write(to: jsonURL, options: .atomic)
     }
     
     func ReturnName(unkID: String) -> String{

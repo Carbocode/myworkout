@@ -33,4 +33,22 @@ extension Bundle {
             fatalError("Failed to load \(file) from bundle.")
         }*/
     }
+    
+    static func load(_ filename: String) -> String {
+        let readURL = Bundle.main.url(forResource: filename, withExtension: "json")! //Example json file in our bundle
+        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! // Initializing the url for the location where we store our data in filemanager
+
+        let jsonURL = documentDirectory // appending the file name to the url
+            .appendingPathComponent(filename)
+            .appendingPathExtension("json")
+        print(jsonURL)
+
+        // The following condition copies the example file in our bundle to the correct location if it isnt present
+        if !FileManager.default.fileExists(atPath: jsonURL.path) {
+            try? FileManager.default.copyItem(at: readURL, to: jsonURL)
+        }
+
+        // returning the parsed data
+        return try! String(decoding:Data(contentsOf: jsonURL), as: UTF8.self)
+    }
 }
