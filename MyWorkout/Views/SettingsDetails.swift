@@ -92,13 +92,14 @@ struct SettingsDetails: View {
                             Spacer(); Image(systemName: "square.and.arrow.down"); Text("Importa"); Spacer()
                         }
                         .fileImporter(isPresented: $isImporting, allowedContentTypes: [.json], allowsMultipleSelection: false,
-                            onCompletion: { result in
+                            onCompletion: { (result) in
                                 do {
-                                    guard let selectedFile: URL = try result.get().first else { return } //prendo URL
-                                    appData.Workouts = Bundle.main.decode([Workout].self, from: selectedFile) //Decodifico contenuto
+                                    guard let selectedFile: URL = try result.get().first else {return} //prendo URL
+                                    appData.Workouts = Bundle.main.import([Workout].self, from: selectedFile) //Decodifico contenuto
                                     appData.SaveWorkouts() //Salvo il contenuto importato
                                 } catch {
-                                    // Handle failure.
+                                    print("Error reading doc")
+                                    print(error.localizedDescription)
                                 }
                             })
                         Button(action: {

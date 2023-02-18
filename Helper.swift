@@ -3,9 +3,6 @@ import UIKit
 extension Bundle {
     
     func decode<T: Decodable>(_ type: T.Type, from url: URL) -> T {
-        /*guard let url = self.url(forResource: file, withExtension: nil) else {
-            fatalError("Failed to locate \(file) in bundle.")
-        }*/
         
         guard let fileContent = try? Data(contentsOf: url) else {
             fatalError("Failed to load file")
@@ -18,22 +15,31 @@ extension Bundle {
         return loaded
     }
     
+    func `import`<T: Decodable>(_ type: T.Type, from url: URL) -> T {
+        
+        if url.startAccessingSecurityScopedResource() {
+            guard let fileContent = try? Data(contentsOf: url) else {
+                fatalError("Failed to load file")
+            }
+            defer { url.stopAccessingSecurityScopedResource() }
+            
+            guard let loaded = try? JSONDecoder().decode(T.self, from: fileContent) else {
+                fatalError("Failed to decode file content")
+            }
+            
+            return loaded
+        }
+        else{
+            fatalError("Failed to import file")
+        }
+    }
+    
     func encode<T: Encodable>(_ value: T) -> String{
         guard let loaded = try? JSONEncoder().encode(value) else {
             fatalError("Failed to encode.")
         }
         
         return String(decoding: loaded, as: UTF8.self)
-        
-        /*guard let url = self.url(forResource: file, withExtension: nil) else {
-            fatalError("Failed to locate \(file) in bundle.")
-        }
-        
-        do {
-            try loaded.write(to: url)
-        } catch {
-            fatalError("Failed to load \(file) from bundle.")
-        }*/
     }
     
     static func load(_ filename: String) -> URL {
