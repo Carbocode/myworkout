@@ -109,20 +109,24 @@ struct ContentView: View {
     private func onAdd() {
         appData.Workouts.append(Workout(id: "3-\(appData.Workouts.count)", name: textBuffer, exercises: []))
         textBuffer=""
+        
+        appData.SaveWorkouts()
     }
     
     private func onDelete(offsets: IndexSet) {
         appData.Workouts.remove(atOffsets: offsets)
+        appData.SaveWorkouts()
     }
     
     private func onMove(source: IndexSet, destination: Int) {
         appData.Workouts.move(fromOffsets: source, toOffset: destination)
-        
+        appData.SaveWorkouts()
     }
     
     private func onEdit(){
         appData.Workouts[selectedItem ?? 0].name=textBuffer
         textBuffer = ""
+        appData.SaveWorkouts()
     }
 }
 

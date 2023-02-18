@@ -22,8 +22,8 @@ struct ExerciseList: View {
     @State private var multiSelection = Swift.Set<String>()
     @State private var selectedItem = ""
     
-    var weights: [Weight] { searchingText.isEmpty ? appData.SettingsData.weights.sorted() :
-        appData.SettingsData.weights.filter{$0.name.localizedCaseInsensitiveContains(searchingText)}.sorted()
+    var weights: [ExList] { searchingText.isEmpty ? appData.Exlist.sorted() :
+        appData.Exlist.filter{$0.name.localizedCaseInsensitiveContains(searchingText)}.sorted()
     }
     
     
@@ -84,10 +84,11 @@ struct ExerciseList: View {
     }
     
     func onAdd() {
-        appData.SettingsData.weights.append(Weight(id: "1-\(appData.SettingsData.weights.count)", name: textBuffer))
+        appData.Exlist.append(ExList(id: "1-\(appData.Exlist.count)", name: textBuffer))
         textBuffer=""
         searchingText=""
         
+        appData.SaveSettings()
     }
     
     //Modify by ID
@@ -95,16 +96,18 @@ struct ExerciseList: View {
         var exactIndex = 0
         var index = 0
         //Ciclo tra tutti gli esercizi
-        for weight in appData.SettingsData.weights{
+        for ex in appData.Exlist{
             //Cerco l'id dell'esercizio corrisponde all'elemento della lista
-            if (weight.id == selectedItem){
+            if (ex.id == selectedItem){
                 exactIndex=index
             }
             index+=1
         }
         
-        appData.SettingsData.weights[exactIndex].name=textBuffer
+        appData.Exlist[exactIndex].name=textBuffer
         textBuffer=""
+        
+        appData.SaveSettings()
     }
     
     //Delete by ID
@@ -112,15 +115,18 @@ struct ExerciseList: View {
         var exactIndex=0 //Indice corretto da eliminare
         var index = 0
         //Ciclo tra tutti gli esercizi
-        for weight in appData.SettingsData.weights{
+        for ex in appData.Exlist{
             //Cerco l'id dell'esercizio corrisponde all'elemento della lista
-            if (weight.id == id){
+            if (ex.id == id){
                 exactIndex=index
             }
             index+=1
         }
-        appData.DeleteExFromWorkout(exID: appData.SettingsData.weights[exactIndex].id)
-        appData.SettingsData.weights.remove(at: exactIndex)
+        appData.DeleteExFromWorkout(exID: appData.Exlist[exactIndex].id)
+        appData.Exlist.remove(at: exactIndex)
+        
+        appData.SaveSettings()
+        appData.SaveWorkouts()
     }
     
     struct ExerciseList_Previews: PreviewProvider {

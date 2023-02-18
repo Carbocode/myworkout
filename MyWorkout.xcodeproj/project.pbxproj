@@ -12,7 +12,7 @@
 		660475EB297002D30060BDA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 660475EA297002D30060BDA4 /* Assets.xcassets */; };
 		660475EE297002D30060BDA4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 660475ED297002D30060BDA4 /* Preview Assets.xcassets */; };
 		660475FB297027C30060BDA4 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660475FA297027C30060BDA4 /* Helper.swift */; };
-		660475FD297035CC0060BDA4 /* settings.json in Resources */ = {isa = PBXBuildFile; fileRef = 660475FC297035CC0060BDA4 /* settings.json */; };
+		660475FD297035CC0060BDA4 /* exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = 660475FC297035CC0060BDA4 /* exercises.json */; };
 		66180B1A29716F13007AD265 /* WorkoutDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66180B1929716F13007AD265 /* WorkoutDetails.swift */; };
 		66180B1C29718A16007AD265 /* ExerciseDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66180B1B29718A16007AD265 /* ExerciseDetails.swift */; };
 		66935291299BA3AD00639B11 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66935290299BA3AD00639B11 /* Settings.swift */; };
@@ -30,7 +30,7 @@
 		660475EA297002D30060BDA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		660475ED297002D30060BDA4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		660475FA297027C30060BDA4 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = SOURCE_ROOT; };
-		660475FC297035CC0060BDA4 /* settings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = settings.json; sourceTree = SOURCE_ROOT; };
+		660475FC297035CC0060BDA4 /* exercises.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = exercises.json; sourceTree = SOURCE_ROOT; };
 		66180B1929716F13007AD265 /* WorkoutDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetails.swift; sourceTree = "<group>"; };
 		66180B1B29718A16007AD265 /* ExerciseDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetails.swift; sourceTree = "<group>"; };
 		66935290299BA3AD00639B11 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -71,11 +71,11 @@
 		660475E5297002D20060BDA4 /* MyWorkout */ = {
 			isa = PBXGroup;
 			children = (
-				66945279297F2915003EF2EF /* MainView.swift */,
+				660475E6297002D20060BDA4 /* MyWorkoutApp.swift */,
 				66845A38299E421900B63422 /* Views */,
 				66935292299BA5E500639B11 /* AppData.swift */,
 				66935290299BA3AD00639B11 /* Settings.swift */,
-				660475FC297035CC0060BDA4 /* settings.json */,
+				660475FC297035CC0060BDA4 /* exercises.json */,
 				66B4A9072976FECC00572B49 /* workouts.json */,
 				660475FA297027C30060BDA4 /* Helper.swift */,
 				660475EA297002D30060BDA4 /* Assets.xcassets */,
@@ -95,8 +95,8 @@
 		66845A38299E421900B63422 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				66945279297F2915003EF2EF /* MainView.swift */,
 				660475E8297002D20060BDA4 /* ContentView.swift */,
-				660475E6297002D20060BDA4 /* MyWorkoutApp.swift */,
 				66180B1929716F13007AD265 /* WorkoutDetails.swift */,
 				66180B1B29718A16007AD265 /* ExerciseDetails.swift */,
 				6694527B297F296A003EF2EF /* SettingsDetails.swift */,
@@ -163,7 +163,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				660475FD297035CC0060BDA4 /* settings.json in Resources */,
+				660475FD297035CC0060BDA4 /* exercises.json in Resources */,
 				660475EE297002D30060BDA4 /* Preview Assets.xcassets in Resources */,
 				660475EB297002D30060BDA4 /* Assets.xcassets in Resources */,
 				66B4A9082976FECC00572B49 /* workouts.json in Resources */,

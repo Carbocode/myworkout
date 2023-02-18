@@ -6,12 +6,48 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
+
+struct JSONFile: FileDocument {
+    static var readableContentTypes = [UTType.json]
+    static var writableContentTypes = [UTType.json]
+
+    //Contenuto File
+    var text = ""
+
+    //Initializer
+    init(initialText: String = "") {
+        text = initialText
+    }
+
+    // this initializer loads data that has been saved previously
+    init(configuration: ReadConfiguration) throws {
+        if let data = configuration.file.regularFileContents {
+            text = String(decoding: data, as: UTF8.self)
+        }
+    }
+
+    // this will be called when the system wants to write our data to disk
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        return FileWrapper(regularFileWithContents: Data(text.utf8))
+    }
+}
 
 struct SettingsDetails: View {
     @EnvironmentObject var appData : AppData
     
-    @State var isImporting = false
-    @State var isExporting = false
+    //File per import/export di dati
+    @State private var workoutFile = JSONFile()
+    @State private var exlistFile = JSONFile()
+    
+    @State private var isImporting = false //Avvio importazione
+    @State private var isExporting = false //Avvio esportazione
+    
+    //Impostazioni utente
+    @AppStorage("defaultRest", store: .standard) private var defaultRest = 90
+    @AppStorage("lastRest", store: .standard) private var lastRest = true
+    @AppStorage("imperial", store: .standard) private var imperial = false
+    
     
     let timeArray = (0...300).filter { number -> Bool in
         return number % 10 == 0}
@@ -20,20 +56,22 @@ struct SettingsDetails: View {
         NavigationStack{
             List{
                 Section{
-                    Toggle("Recupero di fine esercizio", isOn: $appData.SettingsData.lastREST)
+                    Toggle("Recupero di fine esercizio", isOn: $lastRest)
                     DisclosureGroup(
                         content:{
-                            Picker("Tempo default di Recupero", selection: $appData.SettingsData.defaultREST){
+                            Picker("Tempo default di Recupero", selection: $defaultRest){
                                 ForEach(timeArray, id: \.self) {
                                         Text("\($0)s")
                                     }
                             }
                             .pickerStyle(WheelPickerStyle())},
                         label: {
-                            HStack{Text("Tempo recupero di Default"); Spacer();Text("\(appData.SettingsData.defaultREST)s").foregroundColor(.accentColor)}
+                            HStack{Text("Tempo recupero di Default"); Spacer();Text("\(defaultRest)s").foregroundColor(.accentColor)}
                         }
                     )
-                    Toggle("Sistema Imperiale", isOn: $appData.SettingsData.imperial)
+                    
+                    Toggle("Sistema Imperiale", isOn: $imperial)
+                        
                     NavigationLink{
                         ExerciseList(isSelecting: false)
                     }label: {
@@ -56,18 +94,21 @@ struct SettingsDetails: View {
                         .fileImporter(isPresented: $isImporting, allowedContentTypes: [.json], allowsMultipleSelection: false,
                             onCompletion: { result in
                                 do {
-                                    guard let selectedFile: URL = try result.get().first else { return }
-                                    guard let message = String(data: try Data(contentsOf: selectedFile), encoding: .utf8) else { return }
-                                    
-                                    appData.workoutFiles.text = message
+                                    guard let selectedFile: URL = try result.get().first else { return } //prendo URL
+                                    appData.Workouts = Bundle.main.decode([Workout].self, from: selectedFile) //Decodifico contenuto
+                                    appData.SaveWorkouts() //Salvo il contenuto importato
                                 } catch {
                                     // Handle failure.
                                 }
                             })
-                        Button(action: {isExporting.toggle()}){
+                        Button(action: {
+                            workoutFile.text = Bundle.main.encode(appData.Workouts) //Aggiorno il contenuto
+                            isExporting.toggle() //Avvio esportazione
+                            
+                        }){
                             Spacer(); Text("Esporta"); Image(systemName: "square.and.arrow.up"); Spacer()
                         }
-                        .fileExporter(isPresented: $isExporting, document: appData.workoutFiles, contentType: .json, onCompletion: { result in
+                        .fileExporter(isPresented: $isExporting, document: workoutFile, contentType: .json, onCompletion: { result in
                             switch result {
                                 case .success(let url):
                                     print("Saved to \(url)")

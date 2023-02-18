@@ -31,7 +31,12 @@ struct WorkoutDetails: View {
                                     
                                     HStack{
                                         let setsNumber = exercise.sets.count
-                                        Text("\(setsNumber) Sets x \(exercise.sets[0].reps) Reps | \(exercise.rest)s")
+                                        if setsNumber > 0{
+                                            Text("\(setsNumber) Sets x \(exercise.sets[0].reps) Reps | \(exercise.rest)s")
+                                        }else{
+                                            Text("No Sets")
+                                        }
+                                        
                                     }.font(.subheadline)
                                 }
                                 .padding()
@@ -39,7 +44,7 @@ struct WorkoutDetails: View {
                     }
                     .onDelete(perform: onDelete)
                     .onMove(perform: onMove)
-                    .sheet(isPresented: $showExSheet){
+                    .sheet(isPresented: $showExSheet, onDismiss: appData.SaveWorkouts){
                         ExerciseDetails(workIndex: index, index: selectedItem)
                     }
                 }
@@ -117,9 +122,11 @@ struct WorkoutDetails: View {
     
     private func onDelete(offsets: IndexSet) {
         appData.Workouts[index].exercises.remove(atOffsets: offsets)
+        appData.SaveWorkouts()
     }
     private func onMove(source: IndexSet, destination: Int) {
         appData.Workouts[index].exercises.move(fromOffsets: source, toOffset: destination)
+        appData.SaveWorkouts()
     }
     
     

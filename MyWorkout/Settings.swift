@@ -7,24 +7,11 @@
 
 import SwiftUI
 
-// MARK: - Settings
-struct Settings: Codable {
-    var defaultREST: Int
-    var lastREST, imperial: Bool
-    var weights: [Weight]
-
-    enum CodingKeys: String, CodingKey {
-        case defaultREST = "defaultRest"
-        case lastREST = "lastRest"
-        case imperial, weights
-    }
-}
-
 // MARK: - Weight
-struct Weight: Codable, Identifiable, Hashable, Comparable {
+struct ExList: Codable, Identifiable, Hashable, Comparable {
     var id, name: String
     
-    static func <(lhs: Weight, rhs: Weight) -> Bool {
+    static func <(lhs: ExList, rhs: ExList) -> Bool {
             return lhs.name < rhs.name
         }
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ExerciseDetails: View {
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var appData : AppData
     
     var workIndex: Int
@@ -172,8 +173,13 @@ struct ExerciseDetails: View {
         showSetAlert.toggle()
     }
     func onDelete(offsets: IndexSet) {
-        appData.Workouts[workIndex].exercises[index].sets.remove(atOffsets: offsets)
+        for i in offsets{
+            if i>=0{
+                appData.Workouts[workIndex].exercises[index].sets.remove(atOffsets: offsets)
+            }
+        }
     }
+    
     func onMove(source: IndexSet, destination: Int) {
         appData.Workouts[workIndex].exercises[index].sets.move(fromOffsets: source, toOffset: destination)
     }

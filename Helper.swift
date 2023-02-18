@@ -2,15 +2,17 @@ import UIKit
 
 extension Bundle {
     
-    func decode<T: Decodable>(_ type: T.Type, from file: TextFile) -> T {
+    func decode<T: Decodable>(_ type: T.Type, from url: URL) -> T {
         /*guard let url = self.url(forResource: file, withExtension: nil) else {
             fatalError("Failed to locate \(file) in bundle.")
         }*/
+        
+        guard let fileContent = try? Data(contentsOf: url) else {
+            fatalError("Failed to load file")
+        }
 
-        let data = Data(file.text.utf8)
-
-        guard let loaded = try? JSONDecoder().decode(T.self, from: data) else {
-            fatalError("Failed to decode \(file) from bundle.")
+        guard let loaded = try? JSONDecoder().decode(T.self, from: fileContent) else {
+            fatalError("Failed to decode file content")
         }
 
         return loaded
@@ -34,7 +36,7 @@ extension Bundle {
         }*/
     }
     
-    static func load(_ filename: String) -> String {
+    static func load(_ filename: String) -> URL {
         let readURL = Bundle.main.url(forResource: filename, withExtension: "json")! //Example json file in our bundle
         let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! // Initializing the url for the location where we store our data in filemanager
 
@@ -49,6 +51,6 @@ extension Bundle {
         }
 
         // returning the parsed data
-        return try! String(decoding:Data(contentsOf: jsonURL), as: UTF8.self)
+        return jsonURL
     }
 }

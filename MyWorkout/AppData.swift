@@ -6,88 +6,35 @@
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
-
-struct TextFile: FileDocument {
-    static var readableContentTypes = [UTType.json]
-
-    //Document content
-    var text = ""
-
-    // a simple initializer that creates new, empty documents
-    init(initialText: String = "") {
-        text = initialText
-    }
-
-    // this initializer loads data that has been saved previously
-    init(configuration: ReadConfiguration) throws {
-        if let data = configuration.file.regularFileContents {
-            text = String(decoding: data, as: UTF8.self)
-        }
-    }
-
-    // this will be called when the system wants to write our data to disk
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        return FileWrapper(regularFileWithContents: Data(text.utf8))
-    }
-    
-    func write(to fileWrapper: inout FileWrapper, contentType: UTType) throws {
-        fileWrapper = FileWrapper(regularFileWithContents: Data(text.utf8))
-    }
-}
 
 class AppData: ObservableObject {
+    
     @Published var Workouts : [Workout]
-    @Published var SettingsData : Settings
-    var workoutFiles = TextFile()
-    var settingsFiles = TextFile()
+    @Published var Exlist : [ExList]
+    var workoutPath : URL
+    var exlistPath : URL
     
     init(){
-        workoutFiles.text = Bundle.load("workouts")
-        settingsFiles.text = Bundle.load("settings")
+        workoutPath = Bundle.load("workouts")
+        exlistPath = Bundle.load("exercises")
         
-        if !workoutFiles.text.isEmpty{
-            Workouts = Bundle.main.decode([Workout].self, from: workoutFiles)
-        }else{
-            Workouts = []
-        }
-        
-        if !settingsFiles.text.isEmpty{
-            SettingsData = Bundle.main.decode(Settings.self, from: settingsFiles)
-        }
-        else{
-            SettingsData = Settings(defaultREST: 60, lastREST: true, imperial: false, weights: [])
-        }
-        
+        Workouts = Bundle.main.decode([Workout].self, from: workoutPath)
+        Exlist = Bundle.main.decode([ExList].self, from: exlistPath)
     }
     
     func SaveWorkouts(){
-        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let jsonURL = documentDirectory
-            .appendingPathComponent("workouts")
-            .appendingPathExtension("json")
-        print(jsonURL)
-        
-        workoutFiles.text = Bundle.main.encode(Workouts)
-        
-        try? JSONEncoder().encode(Workouts).write(to: jsonURL, options: .atomic)
+        try? JSONEncoder().encode(Workouts).write(to: workoutPath, options: .atomic)
     }
     
     func SaveSettings(){
-        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let jsonURL = documentDirectory
-            .appendingPathComponent("settings")
-            .appendingPathExtension("json")
-        
-        settingsFiles.text = Bundle.main.encode(SettingsData)
-        
-        try? JSONEncoder().encode(SettingsData).write(to: jsonURL, options: .atomic)
+        try? JSONEncoder().encode(Exlist).write(to: exlistPath, options: .atomic)
     }
     
+    
     func ReturnName(unkID: String) -> String{
-        for weight in SettingsData.weights{
-            if(weight.id==unkID){
-                return weight.name
+        for ex in Exlist{
+            if(ex.id==unkID){
+                return ex.name
             }
         }
         return "Unknown"
@@ -114,7 +61,7 @@ class AppData: ObservableObject {
                 Exercise(
                     id: "2-\(Workouts[index].exercises.count)",
                     exID: exID,
-                    rest: SettingsData.defaultREST,
+                    rest: UserDefaults.standard.integer(forKey: "defaultRest"),
                     dropSet: 0,
                     dropWeight: 0.0,
                     sets: [
