@@ -27,7 +27,7 @@ struct Exercise: Codable, Identifiable, Hashable {
     var id: String
     var exID: String
     var rest, dropSet: Int
-    var dropWeight: Float
+    var dropWeight: Double
     var sets: [Set]
     var superset: Bool
     
@@ -42,5 +42,5 @@ struct Exercise: Codable, Identifiable, Hashable {
 struct Set: Codable, Identifiable, Hashable {
     var id: String
     var reps: Int
-    var weight: Float
+    var weight: Double
 }

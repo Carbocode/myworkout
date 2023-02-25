@@ -29,15 +29,18 @@ struct ContentView: View {
                         }
                         label: {
                             HStack{ 
-                                //Nome Workout
+                                //MARK: - Workout
                                 Text(workout.name)
-                                    .font(.title2)
+                                    .font(.title3)
+                                    .fontWeight(.bold)
                                     .foregroundColor(.accentColor)
                                     .contextMenu {
-                                        Button(action: {selectedItem=i; showEditAlert.toggle()}) {
-                                                Text("Cambia Nome")
-                                                Image(systemName: "pencil")
-                                        }
+                                        Button(action: {selectedItem=i; showEditAlert.toggle()
+                                            textBuffer = appData.Workouts[selectedItem ?? 0].name
+                                        }) {Label("Cambia Nome", systemImage: "pencil")}
+                                        Button(action: {appData.DupWork(index: i)
+                                            appData.SaveWorkouts()
+                                        }) {Label("Duplica", systemImage: "doc.on.doc.fill")}
                                     }
                                 
                                 Spacer()
@@ -51,12 +54,12 @@ struct ContentView: View {
                     .alert("Cambia Nome", isPresented: $showEditAlert, actions: {
                         TextField("Inserisci nuovo nome", text: $textBuffer )
                         Button("Ok", action: onEdit)
-                        Button("Cancel", role: .cancel, action: {})
+                        Button("Cancel", role: .cancel, action: {textBuffer=""})
                     })
                 }
                 header:{
                     HStack{
-                        //Titolo
+                        //MARK: - Title
                         HStack{
                             Image(systemName: "list.clipboard.fill")
                             Text("Piani")
@@ -64,14 +67,14 @@ struct ContentView: View {
                         .font(.title2)
                         
                         Spacer()
-                        //Modifica i Set
+                        //MARK: - Edit
                         HStack{
                             EditButton()
                                 .foregroundColor(.white)
-                                .font(.caption)
                             Image(systemName: "pencil.circle.fill")
                                 .foregroundColor(.white)
                         }
+                        .font(.caption)
                         .padding(.all, 8.0)
                         .background(Capsule()
                             .foregroundColor(.blue)
@@ -79,19 +82,19 @@ struct ContentView: View {
                         
                         Spacer()
                         
-                        //Aggiungi un piano di allenamento
+                        //MARK: - Add
                         Button(action: {showWorkoutAlert.toggle()}){
                             Text("Aggiungi")
                                 .foregroundColor(.white)
-                                .font(.caption)
                             Image(systemName: "plus.circle.fill")
                                 .foregroundColor(.accentColor)
                         }
+                        .font(.caption)
                         .padding(.all, 8.0)
                         .alert("Aggiungi Workout", isPresented: $showWorkoutAlert, actions: {
                             TextField("Inserisci nome", text: $textBuffer)
                             Button("Ok", action: onAdd)
-                            Button("Cancel", role: .cancel, action: {})
+                            Button("Cancel", role: .cancel, action: {textBuffer=""})
                         })
                         .background(Capsule()
                             .foregroundColor(Color("LightBlack"))

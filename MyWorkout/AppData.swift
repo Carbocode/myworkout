@@ -73,5 +73,19 @@ class AppData: ObservableObject {
             )
         }
     }
+    
+    func DupEx(workIndex: Int, index: Int){
+        Workouts[workIndex].exercises.append(Workouts[workIndex].exercises[index])
+        Workouts[workIndex].exercises[Workouts[workIndex].exercises.count-1].id = "2-\(Workouts[workIndex].exercises.count-1)"
+    }
+    
+    func DupWork(index: Int){
+        Workouts.append(Workouts[index])
+        Workouts[Workouts.count-1].id = "2-\(Workouts.count-1)"
+    }
+    
+    func SwitchEx(workIndex: Int, index: Int, newId: String) {
+        Workouts[workIndex].exercises[index].exID=newId
+    }
 }
 

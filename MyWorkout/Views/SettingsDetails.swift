@@ -42,6 +42,7 @@ struct SettingsDetails: View {
     
     @State private var isImporting = false //Avvio importazione
     @State private var isExporting = false //Avvio esportazione
+    @State private var showAddSheet = false
     
     //Impostazioni utente
     @AppStorage("defaultRest", store: .standard) private var defaultRest = 90
@@ -66,16 +67,16 @@ struct SettingsDetails: View {
                             }
                             .pickerStyle(WheelPickerStyle())},
                         label: {
-                            HStack{Text("Tempo recupero di Default"); Spacer();Text("\(defaultRest)s").foregroundColor(.accentColor)}
+                            HStack{Text("Tempo recupero di Default"); Spacer();Text("\(defaultRest)s")
+                                .foregroundColor(.accentColor).fontWeight(.bold)}
                         }
                     )
                     
                     Toggle("Sistema Imperiale", isOn: $imperial)
                         
-                    NavigationLink{
-                        ExerciseList(isSelecting: false)
-                    }label: {
-                        Text("Tutti gli Esercizi")
+                    Button("Tutti gli Esercizi", action: {showAddSheet.toggle()}).foregroundColor(.primary)
+                    .sheet(isPresented: $showAddSheet){
+                        ExerciseList(isSelecting: false, isSwitching: false)
                     }
                 }
                 header:{

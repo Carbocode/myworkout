@@ -23,8 +23,10 @@ struct MainView: View {
                     Label("Impostazioni", systemImage: "gear")
                 }
         }
+        
         .foregroundColor(.primary)
         .tint(.accentColor)
+        
     }
 }
 
