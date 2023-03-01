@@ -12,73 +12,83 @@ struct ExerciseDetails: View {
     @EnvironmentObject var appData : AppData
     
     var workIndex: Int
-    var index: Int
+    @Binding var index: Int
     
     @State private var editMode = EditMode.inactive
     @State private var showSetAlert = false
     @State private var expandDrop = false
     @State private var decimal = 0
-    @State private var kgLb: String = UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg"
     
     let timeArray = (0...300).filter { number -> Bool in
         return number % 10 == 0}
-    let weightArray = (0...75).filter { number -> Bool in
-        return number % 25 == 0}
+    let weightArray = [0, 5]
     
     
     var body: some View {
         NavigationStack{
+            let rmWeight: Bool = appData.Workouts[workIndex].exercises[index].rmOrW
+            let kgLb: String = (UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg")
+            let kgLbPerc: String = appData.Workouts[workIndex].exercises[index].rmOrW ? "%" : kgLb
+            
             List{
                 let sets = appData.Workouts[workIndex].exercises[index].sets
                 Section{
                     ForEach(Array(sets.enumerated()), id: \.element) { i, singleSet in
-                        //Set
                         DisclosureGroup(
                             content: {
-                                //Scelta Reps e Peso
                                 HStack{
-                                    Picker("Numero di Serie", selection: $appData.Workouts[workIndex].exercises[index].sets[i].reps){
-                                        ForEach((1...100), id: \.self) {
-                                                Text("\($0)x")
+                                    Picker("Numero di Serie", selection: $appData.Workouts[workIndex].exercises[index].sets[i].nSets){
+                                        ForEach((1...20), id: \.self) {
+                                                Text("\($0)")
                                             }
                                     }
-                                    
                                     Text("x")
+                                    Picker("Numero di Rep", selection: $appData.Workouts[workIndex].exercises[index].sets[i].reps){
+                                        ForEach((1...50), id: \.self) {
+                                                Text("\($0)")
+                                            }
+                                    }
                                     Picker("Peso per ogni Serie", selection: $appData.Workouts[workIndex].exercises[index].sets[i].weight){
-                                        ForEach(0...100, id: \.self) {
+                                        ForEach(0...200, id: \.self) {
                                             Text("\($0)").tag(Double($0))
-                                            }
+                                        }
                                     }
-                                    Text(",")
-                                    Picker("Peso per ogni Serie", selection: $decimal){
-                                        ForEach(weightArray, id: \.self) {
-                                            Text("\($0)").tag($0)
+                                    if !rmWeight{
+                                        Text(",")
+                                        Picker("Peso decimale per ogni Serie", selection: $decimal){
+                                            ForEach(weightArray, id: \.self) {
+                                                Text("\($0)").tag($0)
                                             }
+                                        }
                                     }
-                                    Text(kgLb)
-                                }.pickerStyle(WheelPickerStyle())
-                                
+                                    Text(kgLbPerc)
+                                }
+                                .pickerStyle(WheelPickerStyle())
+                                Toggle("Set di Riscaldamento", isOn: $appData.Workouts[workIndex].exercises[index].sets[i].warm)
                             },
                             label:{
                                 HStack{
-                                    ZStack{
-                                        Circle()
-                                            .foregroundColor(.accentColor)
-                                            .frame(width: 50)
-                                        Text("\(singleSet.reps)x")
+                                    HStack{
+                                        Text("\(singleSet.nSets) x \(singleSet.reps)")
+                                            .foregroundColor(.black)
+                                            .padding(4)
+                                            .background(Rectangle().cornerRadius(5).foregroundColor(.accentColor))
+                                        Spacer()
+                                        if rmWeight{
+                                            Text("\(singleSet.weight, specifier: "%.0f")")
+                                        }
+                                        else{
+                                            Text("\(singleSet.weight, specifier: "%.1f")")
+                                        }
+                                        Text(kgLbPerc)
                                     }
-                                    .foregroundColor(.black)
-                                    
-                                    Spacer()
-                                    
-                                    Text("\(singleSet.weight, specifier: "%.2f")")
-                                    Text(kgLb)
                                 }
                             }
                         )
                     }
                     .onDelete(perform: onDelete)
-                    .onMove(perform: onMove)
+                    .onMove(perform: onMove)                    .onAppear(perform: {
+                        appData.Workouts[workIndex].exercises[index].maxWeight = appData.Massimale(sets: sets)})
                 }
                 header:{
                     Stepper(
@@ -109,7 +119,41 @@ struct ExerciseDetails: View {
                     .font(.footnote)
                     .padding(.vertical, 7.0)
                 }
+                footer:{
+                    if !appData.Workouts[workIndex].exercises[index].rmOrW{
+                        Text("(1RM) Massimale Teorico: \(appData.Workouts[workIndex].exercises[index].maxWeight, specifier: "%.0f")\(kgLb)")
+                    }
+                }
                 Section{
+                    //MARK: - Peso Massimo
+                    Toggle("Usa %-1RM", isOn: $appData.Workouts[workIndex].exercises[index].rmOrW)
+                    if appData.Workouts[workIndex].exercises[index].rmOrW {
+                        DisclosureGroup(
+                            content: {
+                                HStack{
+                                    Picker("Peso per ogni Serie", selection: $appData.Workouts[workIndex].exercises[index].maxWeight){
+                                        ForEach(0...200, id: \.self) {
+                                            Text("\($0)").tag(Double($0))
+                                        }
+                                    }
+                                    Text(",")
+                                    Picker("Peso decimale per ogni Serie", selection: $decimal){
+                                        ForEach(weightArray, id: \.self) {
+                                            Text("\($0)").tag($0)
+                                        }
+                                    }
+                                    Text(kgLb)
+                                }
+                            },
+                            label:{
+                                HStack{
+                                    Text("1RM")
+                                    Spacer()
+                                    Text("\(appData.Workouts[workIndex].exercises[index].maxWeight, specifier: "%.1f")\(kgLb)")
+                                }
+                            }
+                        )
+                    }
                     
                     //MARK: - Tempo di recupero
                     DisclosureGroup(
@@ -119,7 +163,6 @@ struct ExerciseDetails: View {
                                     Text("\($0)s")
                                 }
                             }
-                            .pickerStyle(WheelPickerStyle())
                         },
                         label:{
                             HStack{
@@ -155,12 +198,11 @@ struct ExerciseDetails: View {
                                                 Text("\($0)").tag(Double($0))
                                             }
                                     }
-                                    Text(kgLb)
+                                    Text(kgLbPerc)
 
                                 }
                                 
                             }
-                            .pickerStyle(WheelPickerStyle())
                         },
                         label: {
                             HStack{
@@ -170,7 +212,7 @@ struct ExerciseDetails: View {
                                     Text("Ogni \(appData.Workouts[workIndex].exercises[index].dropSet)")
                                     if(appData.Workouts[workIndex].exercises[index].dropWeight>0){
                                         Text("-\(appData.Workouts[workIndex].exercises[index].dropWeight, specifier: "%.0f")")
-                                        Text(kgLb)
+                                        Text(kgLbPerc)
                                             
                                     }
                                 }
@@ -191,6 +233,7 @@ struct ExerciseDetails: View {
                     }
                     .font(.title3)
                 }
+                .pickerStyle(WheelPickerStyle())
             }
             .navigationBarTitle(Text(appData.ReturnName(unkID: appData.Workouts[workIndex].exercises[index].exID)), displayMode: .inline)
              .environment(\.editMode, $editMode)
@@ -199,7 +242,15 @@ struct ExerciseDetails: View {
     }
         
     func onAdd() {
-        appData.Workouts[workIndex].exercises[index].sets.append(Set(id: "1-\(appData.Workouts[workIndex].exercises[index].sets.count)", reps: 1, weight: 0))
+        var prevReps = 10
+        var prevWeight = 0.0
+        let setsCount = appData.Workouts[workIndex].exercises[index].sets.count
+        if setsCount > 1 {
+            prevReps = appData.Workouts[workIndex].exercises[index].sets[setsCount-1].reps
+            prevWeight = appData.Workouts[workIndex].exercises[index].sets[setsCount-1].weight
+        }
+        
+        appData.Workouts[workIndex].exercises[index].sets.append(Set(id: "1-\(appData.Workouts[workIndex].exercises[index].sets.count)", nSets: 1, reps: prevReps, weight: prevWeight, warm: false))
         showSetAlert.toggle()
     }
     func onDelete(offsets: IndexSet) {
@@ -219,7 +270,7 @@ struct ExerciseDetails: View {
 
 struct ExerciseDetails_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseDetails(workIndex: 0, index: 0)
+        ExerciseDetails(workIndex: 0, index: Binding.constant(0))
             .environmentObject(AppData())
     }
 }

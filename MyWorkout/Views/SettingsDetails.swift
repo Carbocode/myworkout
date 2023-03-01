@@ -76,7 +76,7 @@ struct SettingsDetails: View {
                         
                     Button("Tutti gli Esercizi", action: {showAddSheet.toggle()}).foregroundColor(.primary)
                     .sheet(isPresented: $showAddSheet){
-                        ExerciseList(isSelecting: false, isSwitching: false)
+                        ExerciseList(isSelecting: false, isSwitching: false, selectedExercise: Binding.constant(0))
                     }
                 }
                 header:{

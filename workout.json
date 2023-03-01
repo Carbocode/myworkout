@@ -1,0 +1,34 @@
+[
+    {
+        "id": "3-0",
+        "name": "Default Workout",
+        "exercises": [
+            {
+                "id": "2-0",
+                "exId": "1-1",
+                "maxWeight": 0.0,
+                "rmOrW": false,
+                "rest": 90,
+                "dropSet": 0,
+                "dropWeight": 0.0,
+                "sets": [
+                    {
+                        "id": "1-0",
+                        "nSets": 1,
+                        "reps": 12,
+                        "weight": 0.0,
+                        "warm": true
+                    },
+                    {
+                        "id": "1-1",
+                        "nSets": 3,
+                        "reps": 10,
+                        "weight": 0.0,
+                        "warm": false
+                    }
+                ],
+                "superset": false
+            }
+        ]
+    }
+]

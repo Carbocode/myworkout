@@ -14,7 +14,8 @@ struct ExerciseList: View {
     @State var isSelecting: Bool
     @State var isSwitching: Bool
     @State var selectedWorkout: Int?
-    @State var selectedExercise: Int?
+    
+    @Binding var selectedExercise: Int
     
     @State private var showExerciseAlert = false //Alert where to INSERT Ex name
     @State private var showEditAlert = false //Alert where to MODIFY Ex name
@@ -23,12 +24,11 @@ struct ExerciseList: View {
     @State private var searchingText = "" //Searching Text
     @State private var multiSelection = Swift.Set<String>()
     @State private var selectedItem = 0
+    @State private var kgLb: String = UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg"
     
     var weights: [ExList] { searchingText.isEmpty ? appData.Exlist.sorted() :
         appData.Exlist.filter{$0.name.localizedCaseInsensitiveContains(searchingText)}.sorted()
     }
-    
-    
     
     var body: some View {
         ZStack{
@@ -36,12 +36,15 @@ struct ExerciseList: View {
                 List(weights, selection: $multiSelection){ exercise in
                     Button(action:{
                         if isSwitching{
-                            appData.Workouts[selectedWorkout ?? 0].exercises[selectedExercise ?? 0].exID=exercise.id
+                            appData.Workouts[selectedWorkout ?? 0].exercises[selectedExercise].exID=exercise.id
                             dismiss()
                         }
                     }){
-                        Text(exercise.name)
-                            .font(.footnote)
+                        VStack(alignment: .leading){
+                            Text("\(exercise.name)")
+                            Text("Massimale: \(exercise.topWeight, specifier: "%.1f") \(kgLb)")
+                                .font(.footnote)
+                        }
                     }
                     .contextMenu {
                         Button(action: {selectedItem = exactIndex(id: exercise.id); showEditAlert.toggle()
@@ -123,7 +126,7 @@ struct ExerciseList: View {
     }
     
     func onAdd() {
-        appData.Exlist.append(ExList(id: "1-\(appData.Exlist.count)", name: textBuffer))
+        appData.Exlist.append(ExList(id: "1-\(appData.Exlist.count)", name: textBuffer, topWeight: 0.0))
         textBuffer=""
         searchingText=""
         
@@ -164,7 +167,7 @@ struct ExerciseList: View {
     
     struct ExerciseList_Previews: PreviewProvider {
         static var previews: some View {
-            ExerciseList(isSelecting: true, isSwitching: false)
+            ExerciseList(isSelecting: true, isSwitching: false, selectedExercise: Binding.constant(0))
                 .environmentObject(AppData())
         }
     }

@@ -24,30 +24,23 @@ struct ContentView: View {
                 let workouts = appData.Workouts
                 Section{
                     ForEach(Array(workouts.enumerated()), id:\.element) { i, workout in
-                        NavigationLink{
-                            WorkoutDetails(index: i)
+                        NavigationLink(destination: WorkoutDetails(index: i)){
+                            //MARK: - Workout
+                            Text(workout.name)
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .foregroundColor(.accentColor)
+                                .contextMenu {
+                                    Button(action: {selectedItem=i; showEditAlert.toggle()
+                                        textBuffer = appData.Workouts[selectedItem ?? 0].name
+                                    }) {Label("Cambia Nome", systemImage: "pencil")}
+                                    Button(action: {appData.DupWork(index: i)
+                                        appData.SaveWorkouts()
+                                    }) {Label("Duplica", systemImage: "doc.on.doc.fill")}
+                                }
                         }
-                        label: {
-                            HStack{ 
-                                //MARK: - Workout
-                                Text(workout.name)
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.accentColor)
-                                    .contextMenu {
-                                        Button(action: {selectedItem=i; showEditAlert.toggle()
-                                            textBuffer = appData.Workouts[selectedItem ?? 0].name
-                                        }) {Label("Cambia Nome", systemImage: "pencil")}
-                                        Button(action: {appData.DupWork(index: i)
-                                            appData.SaveWorkouts()
-                                        }) {Label("Duplica", systemImage: "doc.on.doc.fill")}
-                                    }
-                                
-                                Spacer()
-                            }
-                            .padding()
-                            .listRowBackground(Color("BW"))
-                        }
+                        .padding()
+                        .listRowBackground(Color("BW"))
                     }
                     .onDelete(perform: onDelete)
                     .onMove(perform: onMove)

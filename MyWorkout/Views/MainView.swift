@@ -13,12 +13,10 @@ struct MainView: View {
     var body: some View {
         TabView {
             ContentView()
-                .environmentObject(appData)
                 .tabItem{
                     Label("Home", systemImage: "house")
                 }
             SettingsDetails()
-                .environmentObject(appData)
                 .tabItem{
                     Label("Impostazioni", systemImage: "gear")
                 }
@@ -26,6 +24,7 @@ struct MainView: View {
         
         .foregroundColor(.primary)
         .tint(.accentColor)
+        .lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
         
     }
 }

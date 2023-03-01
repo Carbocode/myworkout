@@ -15,8 +15,8 @@ class AppData: ObservableObject {
     var exlistPath : URL
     
     init(){
-        workoutPath = Bundle.load("workouts")
-        exlistPath = Bundle.load("exercises")
+        workoutPath = Bundle.load("ex")
+        exlistPath = Bundle.load("workout")
         
         Workouts = Bundle.main.decode([Workout].self, from: workoutPath)
         Exlist = Bundle.main.decode([ExList].self, from: exlistPath)
@@ -24,10 +24,12 @@ class AppData: ObservableObject {
     
     func SaveWorkouts(){
         try? JSONEncoder().encode(Workouts).write(to: workoutPath, options: .atomic)
+        print("Workout saved")
     }
     
     func SaveSettings(){
         try? JSONEncoder().encode(Exlist).write(to: exlistPath, options: .atomic)
+        print("Settings saved")
     }
     
     
@@ -61,13 +63,13 @@ class AppData: ObservableObject {
                 Exercise(
                     id: "2-\(Workouts[index].exercises.count)",
                     exID: exID,
+                    maxWeight: 0.0,
+                    rmOrW: false,
                     rest: UserDefaults.standard.integer(forKey: "defaultRest"),
                     dropSet: 0,
                     dropWeight: 0.0,
                     sets: [
-                        Set(id: "1-0", reps: 10, weight: 0.0),
-                        Set(id: "1-1", reps: 10, weight: 0.0),
-                        Set(id: "1-2", reps: 10, weight: 0.0)
+                        Set(id: "1-0", nSets: 3, reps: 10, weight: 0.0, warm: false),
                     ],
                     superset: false)
             )
@@ -86,6 +88,19 @@ class AppData: ObservableObject {
     
     func SwitchEx(workIndex: Int, index: Int, newId: String) {
         Workouts[workIndex].exercises[index].exID=newId
+    }
+    
+    func Massimale(sets: [Set]) -> Double {
+        var massimale: Double = 0.0
+        
+        for singleSet in sets {
+            let bufferMax = (singleSet.weight / (1.0278 - (0.0278 * Double(singleSet.reps)))).rounded() //Equazione di Brzycky
+            if bufferMax > massimale {
+                massimale = bufferMax
+            }
+        }
+        
+        return massimale
     }
 }
 

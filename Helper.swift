@@ -4,14 +4,18 @@ extension Bundle {
     
     func decode<T: Decodable>(_ type: T.Type, from url: URL) -> T {
         
-        guard let fileContent = try? Data(contentsOf: url) else {
-            fatalError("Failed to load file")
+        guard var loaded = try? JSONDecoder().decode(T.self, from: Data("[]".utf8)) else {
+            fatalError("")
         }
+        
+        do{
+            let fileContent = try Data(contentsOf: url)
 
-        guard let loaded = try? JSONDecoder().decode(T.self, from: fileContent) else {
-            fatalError("Failed to decode file content")
+            loaded = try JSONDecoder().decode(T.self, from: fileContent)
+        }catch{
+            print(error)
         }
-
+        
         return loaded
     }
     
@@ -49,7 +53,8 @@ extension Bundle {
         let jsonURL = documentDirectory // appending the file name to the url
             .appendingPathComponent(filename)
             .appendingPathExtension("json")
-        print(jsonURL)
+        
+        print("Loaded data from: \(jsonURL)")
 
         // The following condition copies the example file in our bundle to the correct location if it isnt present
         if !FileManager.default.fileExists(atPath: jsonURL.path) {

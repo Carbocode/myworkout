@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - Weight
 struct ExList: Codable, Identifiable, Hashable, Comparable {
     var id, name: String
+    var topWeight: Double
     
     static func <(lhs: ExList, rhs: ExList) -> Bool {
             return lhs.name < rhs.name
@@ -24,8 +25,9 @@ struct Workout: Codable, Identifiable, Hashable {
 
 // MARK: - Exercise
 struct Exercise: Codable, Identifiable, Hashable {
-    var id: String
-    var exID: String
+    var id, exID: String
+    var maxWeight: Double
+    var rmOrW: Bool
     var rest, dropSet: Int
     var dropWeight: Double
     var sets: [Set]
@@ -34,13 +36,14 @@ struct Exercise: Codable, Identifiable, Hashable {
     enum CodingKeys: String, CodingKey {
             case id
             case exID = "exId"
-            case rest, dropSet, dropWeight, sets, superset
+            case maxWeight, rmOrW, rest, dropSet, dropWeight, sets, superset
         }
 }
 
 // MARK: - Set
 struct Set: Codable, Identifiable, Hashable {
     var id: String
-    var reps: Int
+    var nSets, reps: Int
     var weight: Double
+    var warm: Bool
 }
