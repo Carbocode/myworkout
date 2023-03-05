@@ -23,6 +23,8 @@ struct WorkoutDetails: View {
     
     var index: Int
     
+    let generator = UINotificationFeedbackGenerator()
+    
     @State private var editMode = EditMode.inactive
     @State private var showAddSheet     = false
     @State private var showSwitchSheet  = false
@@ -143,7 +145,10 @@ struct WorkoutDetails: View {
                 Spacer()
                 HStack{
                     Spacer()
-                    Button(action: {startWorkout.toggle()}){
+                    Button(action: {
+                        startWorkout.toggle()
+                        generator.notificationOccurred(.success)
+                    }){
                         Image(systemName: "figure.mixed.cardio")
                         Text("Inizia Workout")
                         Image(systemName: "figure.strengthtraining.functional")

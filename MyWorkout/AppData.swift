@@ -23,10 +23,8 @@ class AppData: ObservableObject {
         workoutPath = Bundle.load("ex5")
         exlistPath = Bundle.load("workout5")
         
-        /*
         Workouts = Bundle.main.decode([Workout].self, from: workoutPath)
         Exlist = Bundle.main.decode([ExList].self, from: exlistPath)
-         */
     }
     
     func SaveWorkouts(){

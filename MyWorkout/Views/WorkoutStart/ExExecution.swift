@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AudioToolbox
 
 struct ExExecution: View {
     @EnvironmentObject var appData : AppData
@@ -25,6 +26,8 @@ struct ExExecution: View {
                     .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()){ time in
                         if self.time != appData.Workouts[workIndex].exercises[index].rest{
                             self.time+=1
+                        }else{
+                            AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)){}
                         }
                     }
                     .onAppear(perform: {
