@@ -41,52 +41,68 @@ struct WorkoutDetails: View {
                     Section{
                         ForEach(Array(exercises.enumerated()), id: \.element) { i, exercise in
                             //MARK: - Exercise
-                            Button(action: {selectedItem=i; showExSheet.toggle()}){
-                                HStack{
-                                    //Rest Time
-                                    ZStack{
-                                        Circle()
-                                            .foregroundColor(.accentColor)
-                                            .frame(width: 50)
-                                        Text("\(exercise.rest)s")
-                                    }
-                                    .font(.callout)
-                                    
-                                    .foregroundColor(.black)
-                                    .fontWeight(.bold)
-                                    
-                                    VStack(alignment: .leading){
-                                        //ExName
-                                        Text(appData.ReturnName(unkID: exercise.exID))
-                                            .foregroundColor(.accentColor)
-                                            .font(.body)
+                            ZStack{
+                                Button(action: {selectedItem=i; showExSheet.toggle()}){
+                                    HStack{
+                                        //Rest Time
+                                        ZStack{
+                                            Circle()
+                                                .foregroundColor(.accentColor)
+                                                .frame(width: 50)
+                                            if exercise.superset{
+                                                Rectangle().fill(Color.accentColor).frame(width: 5)
+                                                    .padding(.top, 27.0).cornerRadius(5)
+                                            }
+                                            if i != 0 {
+                                                if exercises[i-1].superset{
+                                                    Rectangle().fill(Color.accentColor).frame(width: 5)
+                                                        .padding(.bottom, 27.0).cornerRadius(5)
+                                                }
+                                            }
+                                            
+                                            Text("\(exercise.rest)s")
+                                            
+                                        }
+                                        .font(.callout)
                                         
-                                        HStack{
-                                            //Sets x Reps
-                                            ForEach(ExDetails(ex: exercise)){ visualSet in
-                                                Text(visualSet.text)
-                                                    .padding(3)
-                                                    .foregroundColor(.white)
-                                                    .background(Rectangle()
-                                                        .foregroundColor(visualSet.color)
-                                                        .cornerRadius(5))
-                                                    .padding(.trailing, -5.0)
-                                                    .font(.footnote)
-                                                    .fontWeight(.heavy)
+                                        .foregroundColor(.black)
+                                        .fontWeight(.bold)
+                                        
+                                        VStack(alignment: .leading){
+                                            //ExName
+                                            Text(appData.ReturnName(unkID: exercise.exID))
+                                                .foregroundColor(.accentColor)
+                                                .font(.body)
+                                            
+                                            HStack{
+                                                //Sets x Reps
+                                                ForEach(ExDetails(ex: exercise)){ visualSet in
+                                                    Text(visualSet.text)
+                                                        .padding(3)
+                                                        .foregroundColor(.white)
+                                                        .background(Rectangle()
+                                                            .foregroundColor(visualSet.color)
+                                                            .cornerRadius(5))
+                                                        .padding(.trailing, -5.0)
+                                                        .font(.footnote)
+                                                        .fontWeight(.heavy)
+                                                }
                                             }
                                         }
+                                        .padding()
                                     }
-                                    .padding()
                                 }
+                                .listRowSeparatorTint(.gray)
+                                .listRowBackground(Color.darkEnd)
+                                .contextMenu {
+                                    Button(action: {appData.DupEx(workIndex: index, index: i); appData.SaveWorkouts()
+                                    }) {Label("Duplica", systemImage: "doc.on.doc.fill")}
+                                    Button(action: {selectedItem=i; showSwitchSheet.toggle()
+                                    }) {Label("Sostituisci", systemImage: "repeat")}
+                                }
+                                    
                             }
-                            .listRowSeparatorTint(.gray)
-                            .listRowBackground(Color.darkEnd)
-                            .contextMenu {
-                                Button(action: {appData.DupEx(workIndex: index, index: i); appData.SaveWorkouts()
-                                }) {Label("Duplica", systemImage: "doc.on.doc.fill")}
-                                Button(action: {selectedItem=i; showSwitchSheet.toggle()
-                                }) {Label("Sostituisci", systemImage: "repeat")}
-                            }
+                            
                         }
                         .onDelete(perform: onDelete)
                         .onMove(perform: onMove)
