@@ -40,7 +40,8 @@ struct ContentView: View {
                                 }
                         }
                         .padding()
-                        .listRowBackground(Color("BW"))
+                        .listRowSeparatorTint(.gray)
+                        .listRowBackground(Color.darkEnd)
                     }
                     .onDelete(perform: onDelete)
                     .onMove(perform: onMove)
@@ -61,17 +62,7 @@ struct ContentView: View {
                         
                         Spacer()
                         //MARK: - Edit
-                        HStack{
-                            EditButton()
-                                .foregroundColor(.white)
-                            Image(systemName: "pencil.circle.fill")
-                                .foregroundColor(.white)
-                        }
-                        .font(.caption)
-                        .padding(.all, 8.0)
-                        .background(Capsule()
-                            .foregroundColor(.blue)
-                            .shadow(radius: 5))
+                        EditButton(editMode: $editMode)
                         
                         Spacer()
                         
@@ -91,11 +82,14 @@ struct ContentView: View {
                         })
                         .background(Capsule()
                             .foregroundColor(Color("LightBlack"))
-                            .shadow(radius: 5))
+                            .shadow(color: Color.darkEnd.opacity(0.7), radius: 10, x: 10, y: 10)
+                            .shadow(color: Color.darkStart.opacity(1), radius: 10, x: -5, y: -5))
                     }
                     .padding(.vertical, 7.0)
                 }
             }
+            .background(LinearGradient(Color.darkStart, Color.darkEnd))
+            .scrollContentBackground(.hidden)
             .listStyle(.inset)
             .environment(\.editMode, $editMode)
             .navigationTitle("MyWorkouts")

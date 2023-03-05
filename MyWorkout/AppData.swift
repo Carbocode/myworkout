@@ -15,11 +15,18 @@ class AppData: ObservableObject {
     var exlistPath : URL
     
     init(){
-        workoutPath = Bundle.load("ex")
-        exlistPath = Bundle.load("workout")
+        let singleSet = Set(id: "1-0", nSets: 3, reps: 10, weight: 0.0)
+        let exercises = Exercise(id: "2-0", exID: "1-0", maxWeight: 0.0, rmOrW: false, rest: 90, dropSet: 0, dropWeight: 0.0, warmingSets: [singleSet], sets: [singleSet], superset: false)
+        Workouts = [Workout(id: "3-0", name: "Default Workout", exercises: [exercises])]
+        Exlist = [ExList(id: "1-0", name: "Random Ex", maxWeight: 0.0)]
         
+        workoutPath = Bundle.load("ex5")
+        exlistPath = Bundle.load("workout5")
+        
+        /*
         Workouts = Bundle.main.decode([Workout].self, from: workoutPath)
         Exlist = Bundle.main.decode([ExList].self, from: exlistPath)
+         */
     }
     
     func SaveWorkouts(){
@@ -68,8 +75,9 @@ class AppData: ObservableObject {
                     rest: UserDefaults.standard.integer(forKey: "defaultRest"),
                     dropSet: 0,
                     dropWeight: 0.0,
+                    warmingSets: [],
                     sets: [
-                        Set(id: "1-0", nSets: 3, reps: 10, weight: 0.0, warm: false),
+                        Set(id: "1-0", nSets: 3, reps: 10, weight: 0.0),
                     ],
                     superset: false)
             )

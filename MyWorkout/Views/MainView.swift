@@ -21,8 +21,8 @@ struct MainView: View {
                     Label("Impostazioni", systemImage: "gear")
                 }
         }
-        
         .foregroundColor(.primary)
+        .preferredColorScheme(.dark)
         .tint(.accentColor)
         .lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
         

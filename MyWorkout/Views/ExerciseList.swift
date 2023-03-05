@@ -42,7 +42,7 @@ struct ExerciseList: View {
                     }){
                         VStack(alignment: .leading){
                             Text("\(exercise.name)")
-                            Text("Massimale: \(exercise.topWeight, specifier: "%.1f") \(kgLb)")
+                            Text("Massimale: \(exercise.maxWeight, specifier: "%.1f") \(kgLb)")
                                 .font(.footnote)
                         }
                     }
@@ -121,12 +121,12 @@ struct ExerciseList: View {
                     .background(.regularMaterial)
                 }
             }
-            
-        } 
+        }
+        .preferredColorScheme(.dark)
     }
     
     func onAdd() {
-        appData.Exlist.append(ExList(id: "1-\(appData.Exlist.count)", name: textBuffer, topWeight: 0.0))
+        appData.Exlist.append(ExList(id: "1-\(appData.Exlist.count)", name: textBuffer, maxWeight: 0.0))
         textBuffer=""
         searchingText=""
         

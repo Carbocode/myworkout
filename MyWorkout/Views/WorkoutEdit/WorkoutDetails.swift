@@ -77,6 +77,8 @@ struct WorkoutDetails: View {
                                     .padding()
                                 }
                             }
+                            .listRowSeparatorTint(.gray)
+                            .listRowBackground(Color.darkEnd)
                             .contextMenu {
                                 Button(action: {appData.DupEx(workIndex: index, index: i); appData.SaveWorkouts()
                                 }) {Label("Duplica", systemImage: "doc.on.doc.fill")}
@@ -86,7 +88,9 @@ struct WorkoutDetails: View {
                         }
                         .onDelete(perform: onDelete)
                         .onMove(perform: onMove)
-                        Rectangle().frame(height: 50).opacity(0).listRowSeparator(.hidden)
+                        Rectangle()
+                            .frame(height: 50)
+                            .opacity(0).listRowBackground(Color.clear).listRowSeparatorTint(.clear)
                     }
                     header:{
                         HStack{
@@ -99,17 +103,7 @@ struct WorkoutDetails: View {
                             
                             Spacer()
                             //MARK: - Edit
-                            HStack{
-                                EditButton()
-                                    .foregroundColor(.white)
-                                Image(systemName: "pencil.circle.fill")
-                                    .foregroundColor(.white)
-                            }
-                            .font(.caption)
-                            .padding(.all, 8.0)
-                            .background(Capsule()
-                                .foregroundColor(.blue)
-                                .shadow(radius: 5))
+                            EditButton(editMode: $editMode)
                             
                             Spacer()
                             //MARK: - Add
@@ -126,12 +120,15 @@ struct WorkoutDetails: View {
                             .padding(.all, 8.0)
                             .background(Capsule()
                                 .foregroundColor(Color("LightBlack"))
-                                .shadow(radius: 5))
+                                .shadow(color: Color.darkEnd.opacity(0.7), radius: 10, x: 10, y: 10)
+                                .shadow(color: Color.darkStart.opacity(1), radius: 10, x: -5, y: -5))
                         }
                         .padding(.vertical, 7.0)
                     }
                     
                 }
+                .background(LinearGradient(Color.darkStart, Color.darkEnd))
+                .scrollContentBackground(.hidden)
                 .listStyle(.inset)
                 .navigationBarTitle(Text("\(appData.Workouts[index].name)"), displayMode: .large)
                 .sheet(isPresented: $showExSheet, onDismiss: appData.SaveWorkouts){

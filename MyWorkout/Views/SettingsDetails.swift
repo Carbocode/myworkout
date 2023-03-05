@@ -86,11 +86,14 @@ struct SettingsDetails: View {
                         Spacer()
                     }
                 }
+                .listRowSeparatorTint(.gray)
+                .listRowBackground(Color.darkEnd)
                 
                 Section{
                     HStack{
+                        //MARK: - Import
                         Button(action: {isImporting.toggle()}){
-                            Spacer(); Image(systemName: "square.and.arrow.down"); Text("Importa"); Spacer()
+                            HStack{Spacer(); Image(systemName: "square.and.arrow.down"); Text("Importa"); Spacer()}
                         }
                         .fileImporter(isPresented: $isImporting, allowedContentTypes: [.json], allowsMultipleSelection: false,
                             onCompletion: { (result) in
@@ -103,12 +106,30 @@ struct SettingsDetails: View {
                                     print(error.localizedDescription)
                                 }
                             })
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.accentColor)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.gray, lineWidth: 4)
+                                        .blur(radius: 4)
+                                        .offset(x: 2, y: 2)
+                                        .mask(RoundedRectangle(cornerRadius: 10).fill(LinearGradient(Color.black, Color.clear)))
+                                )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.white, lineWidth: 8)
+                                    .blur(radius: 4)
+                                    .offset(x: -2, y: -2)
+                                    .mask(RoundedRectangle(cornerRadius: 10).fill(LinearGradient(Color.clear, Color.black)))
+                            ))
+                        //MARK: - Export
                         Button(action: {
                             workoutFile.text = Bundle.main.encode(appData.Workouts) //Aggiorno il contenuto
                             isExporting.toggle() //Avvio esportazione
                             
                         }){
-                            Spacer(); Text("Esporta"); Image(systemName: "square.and.arrow.up"); Spacer()
+                            HStack{Spacer(); Text("Esporta"); Image(systemName: "square.and.arrow.up"); Spacer()}
                         }
                         .fileExporter(isPresented: $isExporting, document: workoutFile, contentType: .json, onCompletion: { result in
                             switch result {
@@ -118,9 +139,28 @@ struct SettingsDetails: View {
                                     print(error.localizedDescription)
                             }
                         })
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.accentColor)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.gray, lineWidth: 4)
+                                        .blur(radius: 4)
+                                        .offset(x: 2, y: 2)
+                                        .mask(RoundedRectangle(cornerRadius: 10).fill(LinearGradient(Color.black, Color.clear)))
+                                )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.white, lineWidth: 8)
+                                    .blur(radius: 4)
+                                    .offset(x: -2, y: -2)
+                                    .mask(RoundedRectangle(cornerRadius: 10).fill(LinearGradient(Color.clear, Color.black)))
+                            ))
                     }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .font(.headline)
                     .foregroundColor(.black)
-                    .buttonStyle(.borderedProminent)
+                    
                 }
                 header:{
                     HStack{
@@ -129,7 +169,13 @@ struct SettingsDetails: View {
                         Spacer()
                     }
                 }
+                .listRowSeparatorTint(.gray)
+                .listRowBackground(Color.darkEnd)
             }
+            .background(LinearGradient(Color.darkStart, Color.darkEnd))
+            .scrollContentBackground(.hidden)
+            .shadow(color: Color.darkEnd.opacity(0.7), radius: 10, x: 10, y: 10)
+            .shadow(color: Color.darkStart.opacity(1), radius: 10, x: -5, y: -5)
             .listStyle(InsetGroupedListStyle())
             .navigationTitle("Impostazioni")
         }
