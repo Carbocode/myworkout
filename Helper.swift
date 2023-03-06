@@ -62,6 +62,6 @@ extension Bundle {
         }
 
         // returning the parsed data
-        return jsonURL
+        return readURL
     }
 }

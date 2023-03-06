@@ -60,7 +60,7 @@ struct WarmingSets: View {
                         .pickerStyle(WheelPickerStyle())
                     },
                     label:{
-                        HStack{
+                        VStack(alignment: .leading){
                             HStack{
                                 Text("\(singleSet.nSets) x \(singleSet.reps)")
                                     .foregroundColor(.black)
@@ -74,6 +74,9 @@ struct WarmingSets: View {
                                     Text("\(singleSet.weight, specifier: "%.1f")")
                                 }
                                 Text(kgLbPerc)
+                            }
+                            if appData.debug {
+                                Text(singleSet.id.uuidString).font(.caption2).foregroundColor(.primary)
                             }
                         }
                     }
@@ -112,7 +115,7 @@ struct WarmingSets: View {
             prevWeight = appData.Workouts[workIndex].exercises[index].warmingSets[setsCount-1].weight
         }
         
-        appData.Workouts[workIndex].exercises[index].warmingSets.append(Set(id: "1-\(appData.Workouts[workIndex].exercises[index].warmingSets.count)", nSets: 1, reps: prevReps, weight: prevWeight))
+        appData.Workouts[workIndex].exercises[index].warmingSets.append(Set(id: UUID(), nSets: 1, reps: prevReps, weight: prevWeight))
     }
     
     func onWarmDelete(offsets: IndexSet) {

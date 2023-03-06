@@ -37,6 +37,7 @@ struct WorkoutDetails: View {
         let exercises = appData.Workouts[index].exercises
         ZStack{
             NavigationStack{
+                //MARK: - Ex List
                 List{
                     Section{
                         ForEach(Array(exercises.enumerated()), id: \.element) { i, exercise in
@@ -46,9 +47,6 @@ struct WorkoutDetails: View {
                                     HStack{
                                         //Rest Time
                                         ZStack{
-                                            Circle()
-                                                .foregroundColor(.accentColor)
-                                                .frame(width: 50)
                                             if exercise.superset{
                                                 Rectangle().fill(Color.accentColor).frame(width: 5)
                                                     .padding(.top, 27.0).cornerRadius(5)
@@ -60,20 +58,41 @@ struct WorkoutDetails: View {
                                                 }
                                             }
                                             
+                                            Circle()
+                                                .fill(Color.accentColor)
+                                                .frame(width: 50)
+                                                .overlay(
+                                                    Circle()
+                                                            .stroke(Color.white, lineWidth: 4)
+                                                            .blur(radius: 4)
+                                                            .offset(x: 2, y: 2)
+                                                            .mask(Circle().fill(LinearGradient(Color.black, Color.clear)))
+                                                    )
+                                                .overlay(
+                                                    Circle()
+                                                        .stroke(Color.gray, lineWidth: 8)
+                                                        .blur(radius: 5)
+                                                        .offset(x: -2, y: -2)
+                                                        .mask(Circle().fill(LinearGradient(Color.clear, Color.black)))
+                                                )
+                                            
                                             Text("\(exercise.rest)s")
                                             
                                         }
                                         .font(.callout)
-                                        
                                         .foregroundColor(.black)
                                         .fontWeight(.bold)
                                         
                                         VStack(alignment: .leading){
                                             //ExName
-                                            Text(appData.ReturnName(unkID: exercise.exID))
-                                                .foregroundColor(.accentColor)
-                                                .font(.body)
-                                            
+                                            HStack{
+                                                Text("\(i+1)°").font(.headline)
+                                                //ExName
+                                                Text(appData.ReturnName(unkID: exercise.exID))
+                                                    .foregroundColor(.accentColor)
+                                                    .font(.body)
+                                                    .fontWeight(.bold)
+                                            }
                                             HStack{
                                                 //Sets x Reps
                                                 ForEach(ExDetails(ex: exercise)){ visualSet in
@@ -88,6 +107,11 @@ struct WorkoutDetails: View {
                                                         .fontWeight(.heavy)
                                                 }
                                             }
+                                            if appData.debug {
+                                                Text(exercise.id.uuidString).font(.caption2)
+                                                Text("exID: \n \(exercise.exID.uuidString)").font(.caption2)
+                                            }
+                                            
                                         }
                                         .padding()
                                     }
@@ -102,10 +126,13 @@ struct WorkoutDetails: View {
                                 }
                                     
                             }
+                            .listRowSeparatorTint(.gray)
+                            .listRowBackground(Color.darkEnd)
                             
                         }
                         .onDelete(perform: onDelete)
                         .onMove(perform: onMove)
+                        
                         Rectangle()
                             .frame(height: 50)
                             .opacity(0).listRowBackground(Color.clear).listRowSeparatorTint(.clear)
@@ -157,6 +184,8 @@ struct WorkoutDetails: View {
                 }
                 .environment(\.editMode, $editMode)
             }
+            
+            //MARK: - Start Workout Button
             VStack{
                 Spacer()
                 HStack{

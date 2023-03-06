@@ -8,6 +8,7 @@
 import SwiftUI
 
 class AppData: ObservableObject {
+    var debug = true
     
     @Published var Workouts : [Workout]
     @Published var Exlist : [ExList]
@@ -15,13 +16,16 @@ class AppData: ObservableObject {
     var exlistPath : URL
     
     init(){
-        let singleSet = Set(id: "1-0", nSets: 3, reps: 10, weight: 0.0)
-        let exercises = Exercise(id: "2-0", exID: "1-0", maxWeight: 0.0, rmOrW: false, rest: 90, dropSet: 0, dropWeight: 0.0, warmingSets: [singleSet], sets: [singleSet], superset: false)
-        Workouts = [Workout(id: "3-0", name: "Default Workout", exercises: [exercises])]
-        Exlist = [ExList(id: "1-0", name: "Random Ex", maxWeight: 0.0)]
+        let id = UUID()
+        Exlist = [ExList(id: id, name: "Random Ex", topWeight: 0.0), ExList(id: UUID(), name: "Random Ex 2", topWeight: 0.0), ExList(id: UUID(), name: "Random Ex 3", topWeight: 0.0)]
         
-        workoutPath = Bundle.load("ex5")
-        exlistPath = Bundle.load("workout5")
+        let singleSet = Set(id: UUID(), nSets: 3, reps: 10, weight: 0.0)
+        let exercises = Exercise(id: UUID(), exID: id, maxWeight: 0.0, rmOrW: false, rest: 90, dropSet: 0, dropWeight: 0.0, warmingSets: [singleSet], sets: [singleSet], superset: false)
+        Workouts = [Workout(id: UUID(), name: "Default Workout", exercises: [exercises])]
+        
+        
+        workoutPath = Bundle.load("ex6")
+        exlistPath = Bundle.load("workout6")
         
         Workouts = Bundle.main.decode([Workout].self, from: workoutPath)
         Exlist = Bundle.main.decode([ExList].self, from: exlistPath)
@@ -38,7 +42,7 @@ class AppData: ObservableObject {
     }
     
     
-    func ReturnName(unkID: String) -> String{
+    func ReturnName(unkID: UUID) -> String{
         for ex in Exlist{
             if(ex.id==unkID){
                 return ex.name
@@ -47,7 +51,7 @@ class AppData: ObservableObject {
         return "Unknown"
     }
     
-    func DeleteExFromWorkout(exID: String){
+    func DeleteExFromWorkout(exID: UUID){
         var i = 0
         for workout in Workouts {
             var j = 0
@@ -61,12 +65,12 @@ class AppData: ObservableObject {
         }
     }
     
-    func AddExToWorkout(exIDs: Swift.Set<String>, index: Int){
+    func AddExToWorkout(exIDs: Swift.Set<UUID>, index: Int){
         
         for exID in exIDs {
             Workouts[index].exercises.append(
                 Exercise(
-                    id: "2-\(Workouts[index].exercises.count)",
+                    id: UUID(),
                     exID: exID,
                     maxWeight: 0.0,
                     rmOrW: false,
@@ -75,7 +79,7 @@ class AppData: ObservableObject {
                     dropWeight: 0.0,
                     warmingSets: [],
                     sets: [
-                        Set(id: "1-0", nSets: 3, reps: 10, weight: 0.0),
+                        Set(id: UUID(), nSets: 3, reps: 10, weight: 0.0),
                     ],
                     superset: false)
             )
@@ -84,15 +88,15 @@ class AppData: ObservableObject {
     
     func DupEx(workIndex: Int, index: Int){
         Workouts[workIndex].exercises.append(Workouts[workIndex].exercises[index])
-        Workouts[workIndex].exercises[Workouts[workIndex].exercises.count-1].id = "2-\(Workouts[workIndex].exercises.count-1)"
+        Workouts[workIndex].exercises[Workouts[workIndex].exercises.count-1].id = UUID()
     }
     
     func DupWork(index: Int){
         Workouts.append(Workouts[index])
-        Workouts[Workouts.count-1].id = "2-\(Workouts.count-1)"
+        Workouts[Workouts.count-1].id = UUID()
     }
     
-    func SwitchEx(workIndex: Int, index: Int, newId: String) {
+    func SwitchEx(workIndex: Int, index: Int, newId: UUID) {
         Workouts[workIndex].exercises[index].exID=newId
     }
     

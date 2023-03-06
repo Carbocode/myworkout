@@ -26,18 +26,23 @@ struct ContentView: View {
                     ForEach(Array(workouts.enumerated()), id:\.element) { i, workout in
                         NavigationLink(destination: WorkoutDetails(index: i)){
                             //MARK: - Workout
-                            Text(workout.name)
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .foregroundColor(.accentColor)
-                                .contextMenu {
-                                    Button(action: {selectedItem=i; showEditAlert.toggle()
-                                        textBuffer = appData.Workouts[selectedItem ?? 0].name
-                                    }) {Label("Cambia Nome", systemImage: "pencil")}
-                                    Button(action: {appData.DupWork(index: i)
-                                        appData.SaveWorkouts()
-                                    }) {Label("Duplica", systemImage: "doc.on.doc.fill")}
+                            VStack(alignment: .leading){
+                                Text(workout.name)
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.accentColor)
+                                    .contextMenu {
+                                        Button(action: {selectedItem=i; showEditAlert.toggle()
+                                            textBuffer = appData.Workouts[selectedItem ?? 0].name
+                                        }) {Label("Cambia Nome", systemImage: "pencil")}
+                                        Button(action: {appData.DupWork(index: i)
+                                            appData.SaveWorkouts()
+                                        }) {Label("Duplica", systemImage: "doc.on.doc.fill")}
+                                    }
+                                if appData.debug {
+                                    Text(workout.id.uuidString).font(.caption2)
                                 }
+                            }
                         }
                         .padding()
                         .listRowSeparatorTint(.gray)
@@ -97,7 +102,7 @@ struct ContentView: View {
     }
     
     private func onAdd() {
-        appData.Workouts.append(Workout(id: "3-\(appData.Workouts.count)", name: textBuffer, exercises: []))
+        appData.Workouts.append(Workout(id: UUID(), name: textBuffer, exercises: []))
         textBuffer=""
         
         appData.SaveWorkouts()

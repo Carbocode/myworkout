@@ -62,7 +62,7 @@ struct Sets: View {
                         .pickerStyle(WheelPickerStyle())
                     },
                     label:{
-                        HStack{
+                        VStack(alignment: .leading){
                             HStack{
                                 Text("\(singleSet.nSets) x \(singleSet.reps)")
                                     .foregroundColor(.black)
@@ -76,6 +76,9 @@ struct Sets: View {
                                     Text("\(singleSet.weight, specifier: "%.1f")")
                                 }
                                 Text(kgLbPerc)
+                            }
+                            if appData.debug {
+                                Text(singleSet.id.uuidString).font(.caption2).foregroundColor(.primary)
                             }
                         }
                     }
@@ -128,7 +131,7 @@ struct Sets: View {
             prevWeight = appData.Workouts[workIndex].exercises[index].sets[setsCount-1].weight
         }
         
-        appData.Workouts[workIndex].exercises[index].sets.append(Set(id: "1-\(appData.Workouts[workIndex].exercises[index].sets.count)", nSets: 1, reps: prevReps, weight: prevWeight))
+        appData.Workouts[workIndex].exercises[index].sets.append(Set(id: UUID(), nSets: 1, reps: prevReps, weight: prevWeight))
     }
     func onSetDelete(offsets: IndexSet) {
         for i in offsets{

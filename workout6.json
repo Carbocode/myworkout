@@ -1,11 +1,11 @@
 [
     {
-        "id": "3-0",
-        "name": "Default Workout",
+        "id": "b9099ef6-bb66-11ed-afa1-0242ac120002",
+        "name": "Random Workout",
         "exercises": [
             {
-                "id": "2-0",
-                "exId": "1-1",
+                "id": "bdceb58e-bb66-11ed-afa1-0242ac120002",
+                "exId": "2dafbb10-bb66-11ed-afa1-0242ac120002",
                 "maxWeight": 0.0,
                 "rmOrW": false,
                 "rest": 90,
@@ -13,7 +13,7 @@
                 "dropWeight": 0.0,
                 "warmingSets": [
                     {
-                        "id": "1-0",
+                        "id": "cda15778-bb66-11ed-afa1-0242ac120002",
                         "nSets": 1,
                         "reps": 12,
                         "weight": 0.0
@@ -21,13 +21,13 @@
                 ],
                 "sets": [
                     {
-                        "id": "1-0",
+                        "id": "d1b9fd38-bb66-11ed-afa1-0242ac120002",
                         "nSets": 1,
                         "reps": 12,
                         "weight": 0.0
                     },
                     {
-                        "id": "1-1",
+                        "id": "d57c1230-bb66-11ed-afa1-0242ac120002",
                         "nSets": 3,
                         "reps": 10,
                         "weight": 0.0
@@ -36,8 +36,8 @@
                 "superset": true
             },
             {
-                "id": "2-0",
-                "exId": "1-0",
+                "id": "c6715534-bb66-11ed-afa1-0242ac120002",
+                "exId": "4dd0eb1c-bb66-11ed-afa1-0242ac120002",
                 "maxWeight": 0.0,
                 "rmOrW": false,
                 "rest": 90,
@@ -45,7 +45,7 @@
                 "dropWeight": 0.0,
                 "warmingSets": [
                     {
-                        "id": "1-0",
+                        "id": "d97a1918-bb66-11ed-afa1-0242ac120002",
                         "nSets": 1,
                         "reps": 12,
                         "weight": 0.0
@@ -53,13 +53,13 @@
                 ],
                 "sets": [
                     {
-                        "id": "1-0",
+                        "id": "e02645f2-bb66-11ed-afa1-0242ac120002",
                         "nSets": 1,
                         "reps": 12,
                         "weight": 0.0
                     },
                     {
-                        "id": "1-1",
+                        "id": "e404f830-bb66-11ed-afa1-0242ac120002",
                         "nSets": 3,
                         "reps": 10,
                         "weight": 0.0

@@ -22,7 +22,7 @@ struct ExerciseList: View {
     
     @State private var textBuffer = ""
     @State private var searchingText = "" //Searching Text
-    @State private var multiSelection = Swift.Set<String>()
+    @State private var multiSelection = Swift.Set<UUID>()
     @State private var selectedItem = 0
     @State private var kgLb: String = UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg"
     
@@ -42,8 +42,11 @@ struct ExerciseList: View {
                     }){
                         VStack(alignment: .leading){
                             Text("\(exercise.name)")
-                            Text("Massimale: \(exercise.maxWeight, specifier: "%.1f") \(kgLb)")
+                            Text("Massimale: \(exercise.topWeight, specifier: "%.1f") \(kgLb)")
                                 .font(.footnote)
+                            if appData.debug{
+                                Text(exercise.id.uuidString).font(.caption2)
+                            }
                         }
                     }
                     .contextMenu {
@@ -126,14 +129,14 @@ struct ExerciseList: View {
     }
     
     func onAdd() {
-        appData.Exlist.append(ExList(id: "1-\(appData.Exlist.count)", name: textBuffer, maxWeight: 0.0))
+        appData.Exlist.append(ExList(id: UUID(), name: textBuffer, topWeight: 0.0))
         textBuffer=""
         searchingText=""
         
         appData.SaveSettings()
     }
     
-    private func exactIndex(id: String) -> Int {
+    private func exactIndex(id: UUID) -> Int {
         var index = 0
         //Ciclo tra tutti gli esercizi
         for ex in appData.Exlist{
@@ -156,7 +159,7 @@ struct ExerciseList: View {
     }
     
     //Delete by ID
-    private func onDelete(id: String) {
+    private func onDelete(id: UUID) {
         let exactIndex = exactIndex(id: id)
         appData.DeleteExFromWorkout(exID: appData.Exlist[exactIndex].id)
         appData.Exlist.remove(at: exactIndex)

@@ -46,37 +46,74 @@ struct BeginWorkout: View {
                             NavigationLink(destination:
                                             ExExecution(workIndex: index, index: i, name: exName).environmentObject(date)
                             ){
-                                    VStack(alignment: .leading){
-                                        // MARK: - Name
-                                        HStack{
-                                            Text("\(i+1)°").font(.headline)
-                                            //ExName
-                                            Text(exName)
-                                                .foregroundColor(.accentColor)
-                                                .font(.body)
-                                                .fontWeight(.bold)
-                                        }
-                                        
-                                        // MARK: - Sets x Reps
-                                        HStack{
-                                            ForEach(ExDetails(ex: exercise)){ visualSet in
-                                                Text(visualSet.text)
-                                                    .padding(3)
-                                                    .foregroundColor(.white)
-                                                    .background(Rectangle()
-                                                        .foregroundColor(visualSet.color)
-                                                        .cornerRadius(5))
-                                                    .padding(.trailing, -5.0)
-                                                    .font(.footnote)
-                                                    .fontWeight(.heavy)
-                                            }
-                                        }
-                                        
+                                ZStack{
+                                    if exercise.superset{
+                                        Rectangle().fill(Color.accentColor).frame(width: 5)
+                                            .padding(.top, 27.0).cornerRadius(5)
                                     }
-                                    .padding()
+                                    if i != 0 {
+                                        if exercises[i-1].superset{
+                                            Rectangle().fill(Color.accentColor).frame(width: 5)
+                                                .padding(.bottom, 27.0).cornerRadius(5)
+                                        }
+                                    }
+                                    
+                                    Circle()
+                                        .fill(Color.accentColor)
+                                        .frame(width: 50)
+                                        .overlay(
+                                            Circle()
+                                                    .stroke(Color.white, lineWidth: 4)
+                                                    .blur(radius: 4)
+                                                    .offset(x: 2, y: 2)
+                                                    .mask(Circle().fill(LinearGradient(Color.black, Color.clear)))
+                                            )
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.gray, lineWidth: 8)
+                                                .blur(radius: 5)
+                                                .offset(x: -2, y: -2)
+                                                .mask(Circle().fill(LinearGradient(Color.clear, Color.black)))
+                                        )
+                                    
+                                    Text("\(exercise.rest)s")
+                                    
                                 }
-                                .listRowSeparatorTint(.gray)
-                                .listRowBackground(Color.darkEnd)
+                                .font(.callout)
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                
+                                VStack(alignment: .leading){
+                                    // MARK: - Name
+                                    HStack{
+                                        Text("\(i+1)°").font(.headline)
+                                        //ExName
+                                        Text(exName)
+                                            .foregroundColor(.accentColor)
+                                            .font(.body)
+                                            .fontWeight(.bold)
+                                    }
+                                    
+                                    // MARK: - Sets x Reps
+                                    HStack{
+                                        ForEach(ExDetails(ex: exercise)){ visualSet in
+                                            Text(visualSet.text)
+                                                .padding(3)
+                                                .foregroundColor(.white)
+                                                .background(Rectangle()
+                                                    .foregroundColor(visualSet.color)
+                                                    .cornerRadius(5))
+                                                .padding(.trailing, -5.0)
+                                                .font(.footnote)
+                                                .fontWeight(.heavy)
+                                        }
+                                    }
+                                    
+                                }
+                                .padding()
+                            }
+                            .listRowSeparatorTint(.gray)
+                            .listRowBackground(Color.darkEnd)
                             
                         }
                         
