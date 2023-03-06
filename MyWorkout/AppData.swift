@@ -8,7 +8,7 @@
 import SwiftUI
 
 class AppData: ObservableObject {
-    var debug = true
+    var debug = false
     
     @Published var Workouts : [Workout]
     @Published var Exlist : [ExList]
@@ -24,8 +24,8 @@ class AppData: ObservableObject {
         Workouts = [Workout(id: UUID(), name: "Default Workout", exercises: [exercises])]
         
         
-        workoutPath = Bundle.load("ex6")
-        exlistPath = Bundle.load("workout6")
+        workoutPath = Bundle.load("workout6")
+        exlistPath = Bundle.load("ex6")
         
         Workouts = Bundle.main.decode([Workout].self, from: workoutPath)
         Exlist = Bundle.main.decode([ExList].self, from: exlistPath)

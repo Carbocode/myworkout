@@ -4,38 +4,52 @@ extension Bundle {
     
     func decode<T: Decodable>(_ type: T.Type, from url: URL) -> T {
         
-        guard var loaded = try? JSONDecoder().decode(T.self, from: Data("[]".utf8)) else {
-            fatalError("")
+        guard let temp = try? JSONDecoder().decode(T.self, from: Data("[]".utf8)) else {
+            fatalError("Impossibile iniziallizare decoding")
         }
         
         do{
-            let fileContent = try Data(contentsOf: url)
-
-            loaded = try JSONDecoder().decode(T.self, from: fileContent)
+            if url.startAccessingSecurityScopedResource() {
+                
+                let fileContent: Data = try Data(contentsOf: url)
+                
+                defer { url.stopAccessingSecurityScopedResource() }
+                
+                let loaded = try JSONDecoder().decode(T.self, from: fileContent)
+                
+                return loaded
+            }
         }catch{
             print(error)
         }
         
-        return loaded
+        print("Returned Empty Object")
+        return temp
     }
     
     func `import`<T: Decodable>(_ type: T.Type, from url: URL) -> T {
         
-        if url.startAccessingSecurityScopedResource() {
-            guard let fileContent = try? Data(contentsOf: url) else {
-                fatalError("Failed to load file")
-            }
-            defer { url.stopAccessingSecurityScopedResource() }
-            
-            guard let loaded = try? JSONDecoder().decode(T.self, from: fileContent) else {
-                fatalError("Failed to decode file content")
-            }
-            
-            return loaded
+        guard let temp = try? JSONDecoder().decode(T.self, from: Data("[]".utf8)) else {
+            fatalError("Impossibile iniziallizare decoding")
         }
-        else{
-            fatalError("Failed to import file")
+        
+        do{
+            if url.startAccessingSecurityScopedResource() {
+                let fileContent = try Data(contentsOf: url)
+                
+                defer { url.stopAccessingSecurityScopedResource() }
+                
+                let loaded = try JSONDecoder().decode(T.self, from: fileContent)
+                
+                return loaded
+            }
         }
+        catch{
+            print(error)
+        }
+        
+        print("Imported Empty Object")
+        return temp
     }
     
     func encode<T: Encodable>(_ value: T) -> String{
@@ -53,12 +67,14 @@ extension Bundle {
         let jsonURL = documentDirectory // appending the file name to the url
             .appendingPathComponent(filename)
             .appendingPathExtension("json")
-        
-        print("Loaded data from: \(jsonURL)")
 
         // The following condition copies the example file in our bundle to the correct location if it isnt present
         if !FileManager.default.fileExists(atPath: jsonURL.path) {
-            try? FileManager.default.copyItem(at: readURL, to: jsonURL)
+            do{
+                try FileManager.default.copyItem(at: readURL, to: jsonURL)
+            }catch{
+                print(error)
+            }
         }
 
         // returning the parsed data
