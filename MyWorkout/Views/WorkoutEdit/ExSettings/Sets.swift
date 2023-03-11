@@ -23,27 +23,33 @@ struct Sets: View {
     let weightArray = [0, 5]
     
     var body: some View {
+        //Perchantage, Kilograms or Libs
         let rmWeight: Bool = appData.Workouts[workIndex].exercises[index].rmOrW
         let kgLb: String = (UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg")
         let kgLbPerc: String = appData.Workouts[workIndex].exercises[index].rmOrW ? "%" : kgLb
         
+        //Sets
         let sets = appData.Workouts[workIndex].exercises[index].sets
         Section{
             ForEach(Array(sets.enumerated()), id: \.element) { i, singleSet in
+                //MARK: - SET
                 DisclosureGroup(
                     content: {
                         HStack{
+                            //Sets Number
                             Picker("Numero di Serie", selection: $appData.Workouts[workIndex].exercises[index].sets[i].nSets){
                                 ForEach((1...20), id: \.self) {
                                         Text("\($0)")
                                     }
                             }
                             Text("x")
+                            //Reps Number
                             Picker("Numero di Rep", selection: $appData.Workouts[workIndex].exercises[index].sets[i].reps){
                                 ForEach((1...50), id: \.self) {
                                         Text("\($0)")
                                     }
                             }
+                            //Weight Number
                             Picker("Peso per ogni Serie", selection: $appData.Workouts[workIndex].exercises[index].sets[i].weight){
                                 ForEach(0...200, id: \.self) {
                                     Text("\($0)").tag(Double($0))
@@ -51,6 +57,7 @@ struct Sets: View {
                             }
                             if !rmWeight{
                                 Text(",")
+                                //Decimal Weight
                                 Picker("Peso decimale per ogni Serie", selection: $decimal){
                                     ForEach(weightArray, id: \.self) {
                                         Text("\($0)").tag($0)
@@ -84,8 +91,9 @@ struct Sets: View {
                     }
                 )
             }
-            .onDelete(perform: onSetDelete)
-            .onMove(perform: onSetMove)
+            .onDelete(perform: onDelete)
+            .onMove(perform: onMove)
+            //TODO: Improve 1RM calc
             .onAppear(perform: {
                 appData.Workouts[workIndex].exercises[index].maxWeight = appData.Massimale(sets: sets)})
         }
@@ -101,8 +109,8 @@ struct Sets: View {
                 Spacer()
                 
                 Stepper("",
-                        onIncrement: {onSetAdd()},
-                        onDecrement: {onSetDelete(offsets: IndexSet([sets.count-1]))}
+                        onIncrement: {onCreate()},
+                        onDecrement: {onDelete(offsets: IndexSet([sets.count-1]))}
                 )
                 .cornerRadius(8)
                 .frame(width: 100, height: 35)
@@ -117,15 +125,18 @@ struct Sets: View {
         }
         footer:{
             if !appData.Workouts[workIndex].exercises[index].rmOrW{
-                Text("(1RM) Massimale Teorico: \(appData.Workouts[workIndex].exercises[index].maxWeight, specifier: "%.0f")\(kgLb)")
+                Text("(1RM) Massimale Teorico: \(appData.Workouts[workIndex].exercises[index].maxWeight, specifier: "%.0f")±1\(kgLb)")
             }
         }
     }
     
-    func onSetAdd() {
+    //Create
+    func onCreate() {
         var prevReps = 10
         var prevWeight = 0.0
         let setsCount = appData.Workouts[workIndex].exercises[index].sets.count
+        
+        //Copy the settings from previous Set
         if setsCount > 1 {
             prevReps = appData.Workouts[workIndex].exercises[index].sets[setsCount-1].reps
             prevWeight = appData.Workouts[workIndex].exercises[index].sets[setsCount-1].weight
@@ -133,7 +144,9 @@ struct Sets: View {
         
         appData.Workouts[workIndex].exercises[index].sets.append(Set(id: UUID(), nSets: 1, reps: prevReps, weight: prevWeight))
     }
-    func onSetDelete(offsets: IndexSet) {
+    
+    //Delete
+    func onDelete(offsets: IndexSet) {
         for i in offsets{
             if i>=0{
                 appData.Workouts[workIndex].exercises[index].sets.remove(atOffsets: offsets)
@@ -141,7 +154,8 @@ struct Sets: View {
         }
     }
     
-    func onSetMove(source: IndexSet, destination: Int) {
+    //Move
+    func onMove(source: IndexSet, destination: Int) {
         appData.Workouts[workIndex].exercises[index].sets.move(fromOffsets: source, toOffset: destination)
     }
 }

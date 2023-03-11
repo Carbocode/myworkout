@@ -21,27 +21,33 @@ struct WarmingSets: View {
     let weightArray = [0, 5]
     
     var body: some View {
+        //Perchantage, Kilograms or Libs
         let rmWeight: Bool = appData.Workouts[workIndex].exercises[index].rmOrW
         let kgLb: String = (UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg")
         let kgLbPerc: String = appData.Workouts[workIndex].exercises[index].rmOrW ? "%" : kgLb
         
+        //Sets
         let warmingSets = appData.Workouts[workIndex].exercises[index].warmingSets
         Section{
             ForEach(Array(warmingSets.enumerated()), id: \.element) { i, singleSet in
+                //MARK: - SET
                 DisclosureGroup(
                     content: {
                         HStack{
+                            //Sets Number
                             Picker("Numero di Serie", selection: $appData.Workouts[workIndex].exercises[index].warmingSets[i].nSets){
                                 ForEach((1...20), id: \.self) {
                                         Text("\($0)")
                                     }
                             }
                             Text("x")
+                            //Reps Number
                             Picker("Numero di Rep", selection: $appData.Workouts[workIndex].exercises[index].warmingSets[i].reps){
                                 ForEach((1...50), id: \.self) {
                                         Text("\($0)")
                                     }
                             }
+                            //Weight Number
                             Picker("Peso per ogni Serie", selection: $appData.Workouts[workIndex].exercises[index].warmingSets[i].weight){
                                 ForEach(0...200, id: \.self) {
                                     Text("\($0)").tag(Double($0))
@@ -49,6 +55,7 @@ struct WarmingSets: View {
                             }
                             if !rmWeight{
                                 Text(",")
+                                //Decimal Weight
                                 Picker("Peso decimale per ogni Serie", selection: $decimal){
                                     ForEach(weightArray, id: \.self) {
                                         Text("\($0)").tag($0)
@@ -82,13 +89,13 @@ struct WarmingSets: View {
                     }
                 )
             }
-            .onDelete(perform: onWarmDelete)
-            .onMove(perform: onWarmMove)
+            .onDelete(perform: onDelete)
+            .onMove(perform: onMove)
         }
         header:{
             Stepper(
-                    onIncrement: {onWarmAdd()},
-                    onDecrement: {onWarmDelete(offsets: IndexSet([warmingSets.count-1]))}
+                    onIncrement: {onCreate()},
+                    onDecrement: {onDelete(offsets: IndexSet([warmingSets.count-1]))}
             ){
                 HStack{
                     HStack{
@@ -106,10 +113,13 @@ struct WarmingSets: View {
         }
     }
     
-    func onWarmAdd() {
+    //Create
+    func onCreate() {
         var prevReps = 10
         var prevWeight = 0.0
         let setsCount = appData.Workouts[workIndex].exercises[index].warmingSets.count
+        
+        //Copy the settings from previous Set
         if setsCount > 1 {
             prevReps = appData.Workouts[workIndex].exercises[index].warmingSets[setsCount-1].reps
             prevWeight = appData.Workouts[workIndex].exercises[index].warmingSets[setsCount-1].weight
@@ -118,7 +128,8 @@ struct WarmingSets: View {
         appData.Workouts[workIndex].exercises[index].warmingSets.append(Set(id: UUID(), nSets: 1, reps: prevReps, weight: prevWeight))
     }
     
-    func onWarmDelete(offsets: IndexSet) {
+    //Delete
+    func onDelete(offsets: IndexSet) {
         for i in offsets{
             if i>=0{
                 appData.Workouts[workIndex].exercises[index].warmingSets.remove(atOffsets: offsets)
@@ -126,7 +137,7 @@ struct WarmingSets: View {
         }
     }
     
-    func onWarmMove(source: IndexSet, destination: Int) {
+    func onMove(source: IndexSet, destination: Int) {
         appData.Workouts[workIndex].exercises[index].warmingSets.move(fromOffsets: source, toOffset: destination)
     }
 }

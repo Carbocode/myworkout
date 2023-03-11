@@ -18,14 +18,14 @@ struct TimerClock: View {
                 //MARK: - Frame
                 Circle()
                     .fill(LinearGradient(Color.darkEnd, Color.darkStart))
-                    .frame(width: 350)
+                    .frame(width: 330)
                     .shadow(color: Color.darkEnd.opacity(0.7), radius: 10, x: 10, y: 10)
                     .shadow(color: Color.darkStart.opacity(1), radius: 10, x: -5, y: -5)
                     .overlay(
                         ForEach(1...60, id:\.self){ i in
                                 Rectangle()
                                     .frame(width: 2, height: i % 5 == 0 ? 15: 5)
-                                    .offset(y: (385-60)/2)
+                                    .offset(y: (365-60)/2)
                                     .rotationEffect(.degrees(Double(i)*6))
                                     .foregroundColor(.gray)
                                     .shadow(radius: 5)
@@ -36,14 +36,14 @@ struct TimerClock: View {
                 //MARK: - Display
                 Circle()
                     .fill(Color.darkEnd)
-                    .frame(width: 300)
+                    .frame(width: 280)
                 //MARK: - RoundBar
                 Circle()
                     .rotation(.degrees(-90))
                     .stroke(style:StrokeStyle(lineWidth: 15))
                     .foregroundColor(Color.darkStart)
                     .opacity(0.2)
-                    .frame(width: 285)
+                    .frame(width: 265)
                 //MARK: - RoundBar Background
                 let vTime = startTime-time
                 Circle()
@@ -51,23 +51,23 @@ struct TimerClock: View {
                     .rotation(.degrees(-90))
                     .stroke(style:StrokeStyle(lineWidth: 15, lineCap: .round))
                     .foregroundColor(.accentColor)
-                    .frame(width: 285)
+                    .frame(width: 265)
                     .overlay(
                         HStack(alignment: .bottom){
                             Text("\(vTime/100)")
-                                .font(.custom("alarm clock", size: 90))
+                                .font(.custom("alarm clock", size: 85))
                                 .frame(width: 55, alignment: .center)
                                 .padding(-5)
                             Text("\(vTime/10%10)")
-                                .font(.custom("alarm clock", size: 90))
+                                .font(.custom("alarm clock", size: 85))
                                 .frame(width: 55, alignment: .center)
                                 .padding(-5)
                             Text("\(vTime%10)")
-                                .font(.custom("alarm clock", size: 90))
+                                .font(.custom("alarm clock", size: 85))
                                 .frame(width: 55, alignment: .center)
                                 .padding(-5)
                             Text("00")
-                                .font(.custom("alarm clock", size: 40))
+                                .font(.custom("alarm clock", size: 35))
                                 .frame(width: 55, alignment: .center)
                                 .padding(-5)
                         }

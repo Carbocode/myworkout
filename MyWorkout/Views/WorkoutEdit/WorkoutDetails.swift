@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-struct VisualSet : Hashable, Identifiable {
-    let id: UUID = UUID()
-    var text: String
-    var color = Color(.gray)
-}
-
 struct Item : Identifiable {
     var id = UUID()
     var i: Int
@@ -42,22 +36,25 @@ struct WorkoutDetails: View {
                     Section{
                         ForEach(Array(exercises.enumerated()), id: \.element) { i, exercise in
                             //MARK: - Exercise
-                            ZStack{
+                            if editMode != EditMode.active{
                                 Button(action: {selectedItem=i; showExSheet.toggle()}){
                                     HStack{
-                                        //Rest Time
+                                        //MARK: Rest Time
                                         ZStack{
+                                            //Superset top line
                                             if exercise.superset{
                                                 Rectangle().fill(Color.accentColor).frame(width: 5)
-                                                    .padding(.top, 27.0).cornerRadius(5)
+                                                    .padding(.top, 40.0).cornerRadius(5)
                                             }
+                                            //Superset bottom line
                                             if i != 0 {
                                                 if exercises[i-1].superset{
                                                     Rectangle().fill(Color.accentColor).frame(width: 5)
-                                                        .padding(.bottom, 27.0).cornerRadius(5)
+                                                        .padding(.bottom, 40.0).cornerRadius(5)
                                                 }
                                             }
                                             
+                                            //Rest Time background
                                             Circle()
                                                 .fill(Color.accentColor)
                                                 .frame(width: 50)
@@ -84,7 +81,7 @@ struct WorkoutDetails: View {
                                         .fontWeight(.bold)
                                         
                                         VStack(alignment: .leading){
-                                            //ExName
+                                            //MARK: ExName
                                             HStack{
                                                 Text("\(i+1)°").font(.headline)
                                                 //ExName
@@ -94,9 +91,9 @@ struct WorkoutDetails: View {
                                                     .fontWeight(.bold)
                                             }
                                             HStack{
-                                                //Sets x Reps
-                                                ForEach(ExDetails(ex: exercise)){ visualSet in
-                                                    Text(visualSet.text)
+                                                //MARK: Sets x Reps
+                                                ForEach(appData.ExDetails(ex: exercise)){ visualSet in
+                                                    Text("\(visualSet.nSets)\(visualSet.text)")
                                                         .padding(3)
                                                         .foregroundColor(.white)
                                                         .background(Rectangle()
@@ -118,20 +115,29 @@ struct WorkoutDetails: View {
                                 }
                                 .listRowSeparatorTint(.gray)
                                 .listRowBackground(Color.darkEnd)
+                                //MARK: Context MENU
                                 .contextMenu {
                                     Button(action: {appData.DupEx(workIndex: index, index: i); appData.SaveWorkouts()
                                     }) {Label("Duplica", systemImage: "doc.on.doc.fill")}
                                     Button(action: {selectedItem=i; showSwitchSheet.toggle()
                                     }) {Label("Sostituisci", systemImage: "repeat")}
                                 }
-                                    
                             }
-                            .listRowSeparatorTint(.gray)
-                            .listRowBackground(Color.darkEnd)
-                            
+                            else{
+                                HStack{
+                                    Text("\(i+1)°").font(.headline)
+                                    //ExName
+                                    Text(appData.ReturnName(unkID: exercise.exID))
+                                        .foregroundColor(.accentColor)
+                                        .font(.body)
+                                        .fontWeight(.bold)
+                                }
+                            }
                         }
                         .onDelete(perform: onDelete)
                         .onMove(perform: onMove)
+                        .listRowSeparatorTint(.gray)
+                        .listRowBackground(Color.darkEnd)
                         
                         Rectangle()
                             .frame(height: 50)
@@ -139,7 +145,7 @@ struct WorkoutDetails: View {
                     }
                     header:{
                         HStack{
-                            //MARK: - Title
+                            //MARK: Title
                             HStack{
                                 Image(systemName: "dumbbell.fill")
                                 Text("Pesi")
@@ -147,11 +153,11 @@ struct WorkoutDetails: View {
                             .font(.title2)
                             
                             Spacer()
-                            //MARK: - Edit
+                            //MARK: Edit Button
                             EditButton(editMode: $editMode)
                             
                             Spacer()
-                            //MARK: - Add
+                            //MARK: ADD Button
                             Button(action: {showAddSheet.toggle()}){
                                 Text("Aggiungi")
                                     .foregroundColor(.white)
@@ -159,6 +165,7 @@ struct WorkoutDetails: View {
                                     .foregroundColor(.accentColor)
                             }
                             .font(.caption)
+                            //MARK: - ADD Sheet
                             .sheet(isPresented: $showAddSheet){
                                 ExerciseList(isSelecting: true, isSwitching: false, selectedWorkout: index, selectedExercise: Binding.constant(0))
                             }
@@ -176,88 +183,60 @@ struct WorkoutDetails: View {
                 .scrollContentBackground(.hidden)
                 .listStyle(.inset)
                 .navigationBarTitle(Text("\(appData.Workouts[index].name)"), displayMode: .large)
+                //MARK: - Exercise Detail Sheet
                 .sheet(isPresented: $showExSheet, onDismiss: appData.SaveWorkouts){
                     ExerciseDetails(workIndex: index, index: $selectedItem)
                 }
+                //MARK: - Switch Sheet
                 .sheet(isPresented: $showSwitchSheet, onDismiss: appData.SaveWorkouts){
                     ExerciseList(isSelecting: false, isSwitching: true, selectedWorkout: index, selectedExercise: $selectedItem)
                 }
                 .environment(\.editMode, $editMode)
             }
             
-            //MARK: - Start Workout Button
-            VStack{
-                Spacer()
-                HStack{
+            //MARK: - Start Button
+            if editMode != EditMode.active {
+                VStack{
                     Spacer()
-                    Button(action: {
-                        startWorkout.toggle()
-                        generator.notificationOccurred(.success)
-                    }){
-                        Image(systemName: "figure.mixed.cardio")
-                        Text("Inizia Workout")
-                        Image(systemName: "figure.strengthtraining.functional")
+                    HStack{
+                        Spacer()
+                        Button(action: {
+                            startWorkout.toggle()
+                            generator.notificationOccurred(.success)
+                        }){
+                            Image(systemName: "figure.mixed.cardio")
+                            Text("Inizia Workout")
+                            Image(systemName: "figure.strengthtraining.functional")
+                        }
+                        .padding()
+                        .buttonStyle(.borderedProminent)
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .disabled(exercises.isEmpty)
+                        .fullScreenCover(isPresented: $startWorkout){
+                            BeginWorkout(workout: appData.Workouts[index])
+                        }
+                        Spacer()
                     }
-                    .padding()
-                    .buttonStyle(.borderedProminent)
-                    .font(.headline)
-                    .foregroundColor(.black)
-                    .disabled(exercises.isEmpty)
-                    .fullScreenCover(isPresented: $startWorkout){
-                        BeginWorkout(index: index)
-                    }
-                    Spacer()
+                    .background(.regularMaterial)
                 }
-                .background(.regularMaterial)
             }
         }
+        .foregroundColor(.primary)
+        .preferredColorScheme(.dark)
     }
     
+    //Delete
     private func onDelete(offsets: IndexSet) {
         appData.Workouts[index].exercises.remove(atOffsets: offsets)
         appData.SaveWorkouts()
     }
+    
+    //Move
     private func onMove(source: IndexSet, destination: Int) {
         appData.Workouts[index].exercises.move(fromOffsets: source, toOffset: destination)
         appData.SaveWorkouts()
     }
-    
-    private func ExDetails(ex: Exercise) -> [VisualSet]{
-        var visualSets : [VisualSet] = []
-        var totalSets = 0
-        visualSets.append(VisualSet(text: "", color: Color(.systemBlue)))
-        for set in ex.sets {
-            totalSets+=set.nSets
-            if set.nSets != 1{
-                
-                visualSets.append(VisualSet(text: "\(set.nSets)x"))
-            }else{
-                visualSets.append(VisualSet(text: ""))
-            }
-            
-            if ex.dropSet == 0 {
-                visualSets[visualSets.count-1].text+="\(set.reps)"
-            }else{
-                visualSets[visualSets.count-1].color = Color(.systemRed)
-                visualSets[visualSets.count-1].text+=""
-                
-                visualSets[visualSets.count-1].text+="("
-                var drop = set.reps
-                while(drop >= ex.dropSet){
-                    visualSets[visualSets.count-1].text+="\(ex.dropSet)"
-                    drop-=ex.dropSet
-                    if (drop >= ex.dropSet){
-                        visualSets[visualSets.count-1].text+="+"
-                    }
-                }
-                visualSets[visualSets.count-1].text+=")"
-            }
-        }
-        visualSets[0].text="\(totalSets) Sets"
-        
-        return visualSets
-    }
-    
     
 }
 

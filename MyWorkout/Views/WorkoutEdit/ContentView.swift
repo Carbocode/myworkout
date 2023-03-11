@@ -31,6 +31,7 @@ struct ContentView: View {
                                     .font(.title3)
                                     .fontWeight(.bold)
                                     .foregroundColor(.accentColor)
+                                //MARK: Context MENU
                                     .contextMenu {
                                         Button(action: {selectedItem=i; showEditAlert.toggle()
                                             textBuffer = appData.Workouts[selectedItem ?? 0].name
@@ -50,15 +51,17 @@ struct ContentView: View {
                     }
                     .onDelete(perform: onDelete)
                     .onMove(perform: onMove)
+                    //MARK: Change name Alert
                     .alert("Cambia Nome", isPresented: $showEditAlert, actions: {
                         TextField("Inserisci nuovo nome", text: $textBuffer )
-                        Button("Ok", action: onEdit)
+                        Button("Ok", action: onUpdate)
                         Button("Cancel", role: .cancel, action: {textBuffer=""})
                     })
                 }
+                //MARK: - Header
                 header:{
                     HStack{
-                        //MARK: - Title
+                        //MARK: Title
                         HStack{
                             Image(systemName: "list.clipboard.fill")
                             Text("Piani")
@@ -66,12 +69,12 @@ struct ContentView: View {
                         .font(.title2)
                         
                         Spacer()
-                        //MARK: - Edit
+                        //MARK: Edit button
                         EditButton(editMode: $editMode)
                         
                         Spacer()
                         
-                        //MARK: - Add
+                        //MARK: Add button
                         Button(action: {showWorkoutAlert.toggle()}){
                             Text("Aggiungi")
                                 .foregroundColor(.white)
@@ -80,9 +83,10 @@ struct ContentView: View {
                         }
                         .font(.caption)
                         .padding(.all, 8.0)
+                        //MARK: ADD Workout Alert
                         .alert("Aggiungi Workout", isPresented: $showWorkoutAlert, actions: {
                             TextField("Inserisci nome", text: $textBuffer)
-                            Button("Ok", action: onAdd)
+                            Button("Ok", action: onCreate)
                             Button("Cancel", role: .cancel, action: {textBuffer=""})
                         })
                         .background(Capsule()
@@ -99,17 +103,28 @@ struct ContentView: View {
             .environment(\.editMode, $editMode)
             .navigationTitle("MyWorkouts")
         }
+        .foregroundColor(.primary)
+        .preferredColorScheme(.dark)
     }
     
-    private func onAdd() {
+    //Create
+    private func onCreate() {
         appData.Workouts.append(Workout(id: UUID(), name: textBuffer, exercises: []))
         textBuffer=""
         
         appData.SaveWorkouts()
     }
     
+    //Delete
     private func onDelete(offsets: IndexSet) {
         appData.Workouts.remove(atOffsets: offsets)
+        appData.SaveWorkouts()
+    }
+    
+    //Update
+    private func onUpdate(){
+        appData.Workouts[selectedItem ?? 0].name=textBuffer
+        textBuffer = ""
         appData.SaveWorkouts()
     }
     
@@ -118,11 +133,7 @@ struct ContentView: View {
         appData.SaveWorkouts()
     }
     
-    private func onEdit(){
-        appData.Workouts[selectedItem ?? 0].name=textBuffer
-        textBuffer = ""
-        appData.SaveWorkouts()
-    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

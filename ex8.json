@@ -2,7 +2,7 @@
     {
         "id": "2dafbb10-bb66-11ed-afa1-0242ac120002",
         "name": "Distensioni Bilanciere Panca Piana",
-        "topWeight": 1.2
+        "topWeight": 0.0
     },
     {
         "id": "3515bcc4-bb66-11ed-afa1-0242ac120002",
@@ -72,6 +72,16 @@
     {
         "id": "822f8738-bb66-11ed-afa1-0242ac120002",
         "name": "Curl cavo basso con corda",
+        "topWeight": 0.0
+    },
+    {
+        "id": "61d9e3d2-ba76-46e7-aee2-31621991f2c2",
+        "name": "Croci",
+        "topWeight": 0.0
+    },
+    {
+        "id": "efc35894-9d91-43b8-bf1c-b4ba074d4485",
+        "name": "Push Down",
         "topWeight": 0.0
     }
 ]

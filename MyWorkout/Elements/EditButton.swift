@@ -23,6 +23,7 @@ struct EditButton: View {
                     .padding(.all, 2.0)
                     .background(Circle()
                         .foregroundColor(.green))
+                
             }else{
                 Image(systemName: "pencil.circle.fill")
                     .padding(.all, 2.0)

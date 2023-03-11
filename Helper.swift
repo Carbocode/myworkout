@@ -9,16 +9,12 @@ extension Bundle {
         }
         
         do{
-            if url.startAccessingSecurityScopedResource() {
                 
                 let fileContent: Data = try Data(contentsOf: url)
-                
-                defer { url.stopAccessingSecurityScopedResource() }
                 
                 let loaded = try JSONDecoder().decode(T.self, from: fileContent)
                 
                 return loaded
-            }
         }catch{
             print(error)
         }
@@ -78,6 +74,6 @@ extension Bundle {
         }
 
         // returning the parsed data
-        return readURL
+        return readURL //TODO: Swiftchare con jsonURL per distribuzione
     }
 }

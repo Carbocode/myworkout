@@ -24,17 +24,20 @@ struct ExerciseDetails: View {
     
     
     var body: some View {
+        //Show perchantage, Kilograms or Librs
         let kgLb: String = (UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg")
         let kgLbPerc: String = appData.Workouts[workIndex].exercises[index].rmOrW ? "%" : kgLb
         
         NavigationStack{
             List{
+                //MARK: - SETS
                 Sets(workIndex: workIndex, index: index, editMode: $editMode)
                     .listRowSeparatorTint(.gray)
                     .listRowBackground(Color.darkEnd)
                 
+                //MARK: - Settings
                 Section{
-                    //MARK: - Peso Massimo
+                    //MARK: Peso Massimo
                     Toggle("Usa %-1RM", isOn: $appData.Workouts[workIndex].exercises[index].rmOrW)
                     if appData.Workouts[workIndex].exercises[index].rmOrW {
                         DisclosureGroup(
@@ -64,7 +67,7 @@ struct ExerciseDetails: View {
                         )
                     }
                     
-                    //MARK: - Tempo di recupero
+                    //MARK: Tempo di recupero
                     DisclosureGroup(
                         content: {
                             Picker("Tempo di Recupero", selection: $appData.Workouts[workIndex].exercises[index].rest){
@@ -90,7 +93,7 @@ struct ExerciseDetails: View {
                             }
                         }
                     )
-                    //MARK: - Dropset
+                    //MARK: Dropset
                     DisclosureGroup(
                         content: {
                             HStack{
@@ -132,7 +135,7 @@ struct ExerciseDetails: View {
                             }.foregroundColor(.accentColor).fontWeight(.bold)
                         }
                     )
-                    //MARK: - Superset
+                    //MARK: Superset
                     Toggle("Superset", isOn: $appData.Workouts[workIndex].exercises[index].superset)
                 }
                 header:{
@@ -142,9 +145,10 @@ struct ExerciseDetails: View {
                     }
                     .font(.title3)
                 }
-                    .listRowSeparatorTint(.gray)
-                    .listRowBackground(Color.darkEnd)
+                .listRowSeparatorTint(.gray)
+                .listRowBackground(Color.darkEnd)
                 
+                //MARK: - WARMING Sets
                 WarmingSets(workIndex: workIndex, index: index, editMode: $editMode)
                     .listRowSeparatorTint(.gray)
                     .listRowBackground(Color.darkEnd)
@@ -158,6 +162,7 @@ struct ExerciseDetails: View {
              .pickerStyle(WheelPickerStyle())
             .listStyle(.insetGrouped)
         }
+        .foregroundColor(.primary)
         .preferredColorScheme(.dark)
     }
     
