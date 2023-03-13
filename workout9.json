@@ -33,7 +33,7 @@
                         "weight": 10
                     }
                 ],
-                "superset": true
+                "superset": false
             },
             {
                 "id": "c6715534-bb66-11ed-afa1-0242ac120002",
@@ -43,14 +43,7 @@
                 "rest": 90,
                 "dropSet": 0,
                 "dropWeight": 0.0,
-                "warmingSets": [
-                    {
-                        "id": "d97a1918-bb66-11ed-afa1-0242ac120002",
-                        "nSets": 1,
-                        "reps": 12,
-                        "weight": 0.0
-                    }
-                ],
+                "warmingSets": [],
                 "sets": [
                     {
                         "id": "e02645f2-bb66-11ed-afa1-0242ac120002",

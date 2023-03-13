@@ -19,7 +19,7 @@ struct ExerciseDetails: View {
     @State private var decimal = 0
     
     let timeArray = (0...300).filter { number -> Bool in
-        return number % 10 == 0}
+        return number % 5 == 0}
     let weightArray = [0, 5]
     
     

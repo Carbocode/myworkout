@@ -84,8 +84,8 @@ struct BeginWorkout: View {
                                         
                                         // MARK: - Sets x Reps
                                         HStack{
-                                            ForEach(appData.ExDetails(ex: workout.exercises[i])){ visualSet in
-                                                Text("\(visualSet.nSets)\(visualSet.text)")
+                                            ForEach(appData.ExDetails(sets: workout.exercises[i].sets)){ visualSet in
+                                                Text("\(visualSet.nSets) \(visualSet.text)")
                                                     .padding(3)
                                                     .foregroundColor(.white)
                                                     .background(Rectangle()

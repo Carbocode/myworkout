@@ -45,13 +45,13 @@ struct SettingsDetails: View {
     @State private var showAddSheet = false
     
     //Impostazioni utente
-    @AppStorage("defaultRest", store: .standard) private var defaultRest = 90
-    @AppStorage("lastRest", store: .standard) private var lastRest = true
+    @AppStorage("defaultRest", store: .standard) private var defaultRest = 0
+    @AppStorage("lastRest", store: .standard) private var lastRest = false
     @AppStorage("imperial", store: .standard) private var imperial = false
     
     
     let timeArray = (0...300).filter { number -> Bool in
-        return number % 10 == 0}
+        return number % 5 == 0}
     
     var body: some View {
         NavigationStack{
@@ -179,7 +179,7 @@ struct SettingsDetails: View {
             .listStyle(InsetGroupedListStyle())
             .navigationTitle("Impostazioni")
         }
-        
+        .preferredColorScheme(.dark)
     }
 }
 

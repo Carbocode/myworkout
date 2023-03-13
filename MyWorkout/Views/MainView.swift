@@ -16,6 +16,10 @@ struct MainView: View {
                 .tabItem{
                     Label("Home", systemImage: "house")
                 }
+            StandAloneTimer()
+                .tabItem{
+                    Label("Timer", systemImage: "timer")
+                }
             SettingsDetails()
                 .tabItem{
                     Label("Impostazioni", systemImage: "gear")

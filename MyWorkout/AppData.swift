@@ -35,8 +35,8 @@ class AppData: ObservableObject {
         */
         
         //Load the Path
-        workoutPath = Bundle.load("workout8")
-        exlistPath = Bundle.load("ex8")
+        workoutPath = Bundle.load("workout9")
+        exlistPath = Bundle.load("ex9")
         
         //Load the Objects
         Workouts = Bundle.main.decode([Workout].self, from: workoutPath)
@@ -134,24 +134,24 @@ class AppData: ObservableObject {
     }
     
     //MARK: - Returns Exercise Set Details
-    func ExDetails(ex: Exercise) -> [VisualSet]{
+    func ExDetails(sets: [Set]) -> [VisualSet]{
         var visualSets : [VisualSet] = [] //Create the array to return
         var totalSets = 0 //Sets counter
         
         //Create the first element, which contains the total sets for the whole exercise
-        visualSets.append(VisualSet(nSets: 0, text: " Sets", color: Color(.systemBlue)))
+        visualSets.append(VisualSet(nSets: 0, text: "Sets", color: Color(.systemBlue)))
         
         //Cycle through each set
-        for set in ex.sets {
+        for set in sets {
             totalSets+=set.nSets //adds the sets to the counter
             
             //Creates a new element for the visualSet, but adds the string if different from 1
-            visualSets.append(VisualSet(nSets: set.nSets,text: "x"))
+            visualSets.append(VisualSet(nSets: set.nSets,text: "x "))
             
             
-            if ex.dropSet == 0 { //If NOT dropset just appends the reps
+            //if ex.dropSet == 0 { //If NOT dropset just appends the reps
                 visualSets[visualSets.count-1].text+="\(set.reps)"
-            }else{ //If dropset generate the string
+            /*}else{ //If dropset generate the string
                 visualSets[visualSets.count-1].color = Color(.systemRed)
                 visualSets[visualSets.count-1].text+=""
                 
@@ -168,7 +168,7 @@ class AppData: ObservableObject {
                 }
                 
                 visualSets[visualSets.count-1].text+=")"
-            }
+            }*/
         }
         visualSets[0].nSets=totalSets
         

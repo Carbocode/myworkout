@@ -43,7 +43,7 @@ struct TimerClock: View {
                     .stroke(style:StrokeStyle(lineWidth: 15))
                     .foregroundColor(Color.darkStart)
                     .opacity(0.2)
-                    .frame(width: 265)
+                    .frame(width: 265, height: 265)
                 //MARK: - RoundBar Background
                 let vTime = startTime-time
                 Circle()
@@ -51,24 +51,24 @@ struct TimerClock: View {
                     .rotation(.degrees(-90))
                     .stroke(style:StrokeStyle(lineWidth: 15, lineCap: .round))
                     .foregroundColor(.accentColor)
-                    .frame(width: 265)
+                    .frame(width: 265, height: 265)
                     .overlay(
                         HStack(alignment: .bottom){
                             Text("\(vTime/100)")
                                 .font(.custom("alarm clock", size: 85))
-                                .frame(width: 55, alignment: .center)
+                                .frame(width: 55, height: 55, alignment: .center)
                                 .padding(-5)
                             Text("\(vTime/10%10)")
                                 .font(.custom("alarm clock", size: 85))
-                                .frame(width: 55, alignment: .center)
+                                .frame(width: 55, height: 55, alignment: .center)
                                 .padding(-5)
                             Text("\(vTime%10)")
                                 .font(.custom("alarm clock", size: 85))
-                                .frame(width: 55, alignment: .center)
+                                .frame(width: 55, height: 55, alignment: .center)
                                 .padding(-5)
                             Text("00")
                                 .font(.custom("alarm clock", size: 35))
-                                .frame(width: 55, alignment: .center)
+                                .frame(width: 55, height: 55, alignment: .center)
                                 .padding(-5)
                         }
                         .foregroundColor(.white)

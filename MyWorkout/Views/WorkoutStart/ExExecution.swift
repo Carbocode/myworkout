@@ -19,6 +19,7 @@ struct ExExecution: View {
     @Binding var index: Int
     @Binding var details: [VisualSet]
     
+    @State var warming = false
     @State var time = 0
     @State var currentSet = 0
     @State var miniSet = 1
@@ -36,7 +37,10 @@ struct ExExecution: View {
         let kgLb: String = (UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg")
         NavigationStack{
             VStack{
+                Spacer()
+                
                 ZStack{
+                    //MARK: - Timer
                     TimerClock(time: $time, startTime: .constant(workout.exercises[index].rest))
                         .onReceive(timer){ time in
                             if timerRunning {
@@ -50,7 +54,7 @@ struct ExExecution: View {
                         }
                     
                     //MARK: - Skip
-                    Label("Skip", systemImage: "forward.fill")
+                    Image(systemName: "forward.fill")
                         .gesture(LongPressGesture(minimumDuration: 0.6)
                             .updating($isSkip) { currentState, gestureState, transaction in
                                 gestureState = currentState
@@ -70,107 +74,161 @@ struct ExExecution: View {
                         .font(.headline)
                         .foregroundColor(.yellow)
                     
-                    //MARK: - Fatto
-                    Label("Fatto", systemImage: "forward.end.fill")
-                        .background(Circle()
-                            .fill(timerRunning ? Color.gray : Color.accentColor)
-                            .frame(width: 280, height: 280)
-                            .overlay(
-                                Circle()
-                                        .stroke(Color.gray, lineWidth: 20)
-                                        .blur(radius: 6)
-                                        .opacity(0.5)
-                                        .offset(x: 2, y: 2)
-                                        .mask(Circle().fill(LinearGradient(Color.black, Color.clear)))
-                                )
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.white, lineWidth: 20)
-                                    .blur(radius: 6)
-                                    .opacity(0.5)
-                                    .offset(x: -4, y: -4)
-                                    .mask(Circle().fill(LinearGradient(Color.clear, Color.black)))
-                            ))
-                        .gesture(LongPressGesture(minimumDuration: 0.6)
-                            .updating($isDone) { currentState, gestureState, transaction in
+                    
+                    ZStack{
+                        //MARK: - Fatto
+                        Image(systemName: "forward.end.fill")
+                            .scaleEffect(isDone ? 0.7 : 1)
+                            .animation(.spring(response: 0.1, dampingFraction: 0.35), value: isDone)
+                            .padding(.leading, 135)
+                            .background(Circle()
+                                .trim(from: 0.5, to: 1)
+                                .rotation(.degrees(90))
+                                .fill(timerRunning ? Color.gray : Color.accentColor)
+                                .frame(width: 280, height: 280))
+                            .gesture(LongPressGesture(minimumDuration: 0.6)
+                                .updating($isDone) { currentState, gestureState, transaction in
+                                    gestureState = currentState
+                                    generator.notificationOccurred(.success)
+                                }
+                                .onEnded { value in
+                                    timerRunning.toggle()
+                                    
+                                    UNUserNotificationCenter.current().requestAuthorization(options: [.badge,.sound,.alert])
+                                    { (_, _) in}
+                                    
+                                    UNUserNotificationCenter.current().delegate = date
+                                    
+                                    if workout.exercises[index].rest>0{
+                                        performNotification()
+                                    }
+                                    
+                                    generator.notificationOccurred(.success)
+                                })
+                            .opacity(timerRunning ? 0 : 1)
+                            
+                        //MARK: - Fallito (come me KEK)
+                        Image(systemName: "xmark.circle.fill")
+                            .scaleEffect(isFailed ?  0.7 : 1)
+                            .animation(.spring(response: 0.1, dampingFraction: 0.35), value: isFailed)
+                            .padding(.trailing, 135)
+                            .background(Circle()
+                                .trim(from: 0.5, to: 1)
+                                .rotation(.degrees(-90))
+                                .fill(timerRunning ? Color.gray : Color.red)
+                                .frame(width: 280, height: 280))
+                            .gesture(LongPressGesture(minimumDuration: 0.6)
+                            .updating($isFailed) { currentState, gestureState, transaction in
                                 gestureState = currentState
                                 generator.notificationOccurred(.success)
                             }
                             .onEnded { value in
                                 timerRunning.toggle()
-                                
-                                UNUserNotificationCenter.current().requestAuthorization(options: [.badge,.sound,.alert])
-                                { (_, _) in}
-                                
-                                UNUserNotificationCenter.current().delegate = date
-                                
-                                if workout.exercises[index].rest>0{
-                                    performNotification()
-                                }
-                                
                                 generator.notificationOccurred(.success)
                             })
-                        .padding()
-                        .foregroundColor(.black)
-                        .font(.title)
-                        .opacity(timerRunning ? 0 : 1)
-                        .scaleEffect(isDone ? 0.9 : 1)
-                        .animation(.spring(response: 0.1, dampingFraction: 0.6), value: isDone)
-                }
-                Label("Fallito", systemImage: "xmark.circle.fill")
-                    .gesture(LongPressGesture(minimumDuration: 0.6)
-                    .updating($isFailed) { currentState, gestureState, transaction in
-                        gestureState = currentState
-                        generator.notificationOccurred(.success)
+                            .opacity(timerRunning ? 0 : 1)
                     }
-                    .onEnded { value in
-                        timerRunning.toggle()
-                        generator.notificationOccurred(.success)
-                    })
-                    .padding()
-                    .background(.thinMaterial)
-                    .cornerRadius(10)
-                    .opacity(timerRunning ? 0 : 1)
-                    .scaleEffect(isFailed ? 1.2 : 1)
-                    .animation(.spring(response: 0.2, dampingFraction: 0.3), value: isFailed)
-                    .font(.headline)
-                    .foregroundColor(.red)
+                    .foregroundColor(.black)
+                    .font(.system(size: 50))
+                    Circle()
+                        .trim(from: 0.5, to: 1)
+                        .rotation(.degrees(-45))
+                        .stroke(Color.white, lineWidth: 40)
+                        .frame(width: 280, height: 280)
+                        .blur(radius: 10)
+                        .opacity(0.2)
+                        .mask(Circle())
+                        
+                    
+                    Circle()
+                        .trim(from: 0.5, to: 1)
+                        .rotation(.degrees(135))
+                        .stroke(Color.gray, lineWidth: 40)
+                        .frame(width: 280, height: 280)
+                        .blur(radius: 10)
+                        .opacity(0.4)
+                        .mask(Circle())
+                }
+                .padding()
                 
-                HStack{
-                    if details.count>0{
-                        Text("\(details[0].nSets)\(details[0].text)").padding(.leading, 25).padding(.trailing, 15).frame(height: 70).background(.blue).font(.custom("", size: 20))
+                if details.count>0{
+                    ZStack{
                         HStack{
-                            Text("\(miniSet)/\(details[1].nSets)")
-                            Text("\(details[1].text)")
+                            Spacer()
+                            Text("\(details[0].nSets)")
+                                .frame(width: 60, height: 70)
+                                .background(Color.black)
+                            
+                            Spacer()
+                            
+                            HStack{
+                                Text("\(miniSet)/\(details[1].nSets)")
+                                Text("\(details[1].text)")
+                            }
+                            .frame(width: 170, height: 70)
+                            .background(Color.black)
+                            
+                            Spacer()
+                            
                             if workout.exercises[index].sets[currentSet].weight > 0 {
-                                Text("\(workout.exercises[index].sets[currentSet].weight, specifier: "%.1f")\(kgLb)").font(.title3)
+                                VStack(alignment: .trailing){
+                                    Text("\(workout.exercises[index].sets[currentSet].weight, specifier: "%.1f")")
+                                    Text(kgLb).font(.custom("alarm clock", size: 20))
+                                }
+                                
+                                    .frame(width: 100, height: 70)
+                                    .background(Color.black)
                             }
                             Spacer()
-                        }.frame(height: 70).background(Color.darkEnd).font(.custom("", size: 30))
-                    }
+                        }
+                        .font(.custom("alarm clock", size: 30))
+                        .textCase(.uppercase)
+                        
+                        
+                        HStack{
+                            Spacer()
+                            Text("SETS")
+                            .frame(width: 60, height: 70)
+                            .background(Color.clear)
+                            
+                            Spacer()
+                            
+                            Text("REPS")
+                                .frame(width: 170, height: 70)
+                                .background(Color.clear)
+                            
+                            Spacer()
+                            
+                            if workout.exercises[index].sets[currentSet].weight > 0 {
+                                Text("PESO")
+                                    .frame(width: 100, height: 70)
+                                    .background(Color.clear)
+                            }
+                            Spacer()
+                        }
+                        .padding(.bottom, 70)
+                        .font(.custom("alarm clock", size: 20))
+                        .textCase(.uppercase)
+                    }.background(Color.darkEnd)
                 }
                 HStack{
-                    HStack{
-                        Text("Next:")
-                        if details.count>2{
-                            ForEach(2..<details.count, id:\.self) { i in
-                                Text("\(details[i].nSets)\(details[i].text)")
-                                    .padding(3)
-                                    .foregroundColor(.white)
-                                    .background(Rectangle()
-                                        .foregroundColor(details[2].color)
-                                        .cornerRadius(5))
-                                    .padding(.trailing, -5.0)
-                            }
+                    Text("Next:")
+                    if details.count>2{
+                        ForEach(2..<details.count, id:\.self) { i in
+                            Text("\(details[i].nSets)\(details[i].text)")
+                                .padding(3)
+                                .background(Rectangle()
+                                    .foregroundColor(details[2].color)
+                                    .cornerRadius(5))
                         }
                     }
-                    .frame(height: 10)
-                    .padding()
-                    .font(.footnote)
-                    .fontWeight(.heavy)
                 }
-                .padding(.bottom,100)
+                .frame(height: 15)
+                .padding()
+                .font(.footnote)
+                .fontWeight(.heavy)
                 
+                Spacer()
             }
             .navigationBarTitle(appData.ReturnName(unkID: workout.exercises[index].exID), displayMode: .inline)
             .background(LinearGradient(Color.darkStart, Color.darkEnd))
@@ -180,10 +238,29 @@ struct ExExecution: View {
         .foregroundColor(.primary)
         .preferredColorScheme(.dark)
         .onAppear{
-            details=appData.ExDetails(ex: workout.exercises[index])
+            if !workout.exercises[index].warmingSets.isEmpty{
+                warming=true
+            }
+            
+            if warming{
+                details=appData.ExDetails(sets: workout.exercises[index].warmingSets)
+            }
+            else{
+                details=appData.ExDetails(sets: workout.exercises[index].sets)
+            }
+            
         }
         .onChange(of: index){ _ in
-            details=appData.ExDetails(ex: workout.exercises[index])
+            if !workout.exercises[index].warmingSets.isEmpty{
+                warming=true
+            }
+            
+            if warming{
+                details=appData.ExDetails(sets: workout.exercises[index].warmingSets)
+            }
+            else{
+                details=appData.ExDetails(sets: workout.exercises[index].sets)
+            }
         }
         
     }
@@ -207,33 +284,58 @@ struct ExExecution: View {
     
     func NextEx(){
         timerRunning.toggle()
-        let set = workout.exercises[index].sets[currentSet].nSets
-        if miniSet < set {
-            miniSet+=1
-            time=0
-            details[0].nSets-=1
-        }
-        else if (currentSet+1) < workout.exercises[index].sets.count{
-            if details.count>2{
-                details.remove(at: 1)
+        
+        time=0
+        
+        if warming{
+            let set = workout.exercises[index].warmingSets[currentSet].nSets
+            if miniSet < set {
+                miniSet+=1
+                details[0].nSets-=1
             }
-            currentSet+=1
-            miniSet=1
-            time=0
-            details[0].nSets-=1
-        }
-        else{
-            /*if (index+1) < workout.exercises.count {
-                time=0
+            else if (currentSet+1) < workout.exercises[index].warmingSets.count{
+                if details.count>2{
+                    details.remove(at: 1)
+                }
+                currentSet+=1
+                miniSet=1
+                details[0].nSets-=1
+            }
+            else{
                 miniSet=1
                 currentSet=0
-                index+=1
+                details=appData.ExDetails(sets: workout.exercises[index].sets)
+                warming.toggle()
             }
-            else{*/
-                dismiss()
-            //}
-            
         }
+        else{
+            let set = workout.exercises[index].sets[currentSet].nSets
+            if miniSet < set {
+                miniSet+=1
+                details[0].nSets-=1
+            }
+            else if (currentSet+1) < workout.exercises[index].sets.count{
+                if details.count>2{
+                    details.remove(at: 1)
+                }
+                currentSet+=1
+                miniSet=1
+                details[0].nSets-=1
+            }
+            else{
+                /*if (index+1) < workout.exercises.count {
+                    time=0
+                    miniSet=1
+                    currentSet=0
+                    index+=1
+                }
+                else{*/
+                    dismiss()
+                //}
+                
+            }
+        }
+        
     }
 }
 
@@ -242,7 +344,7 @@ struct ExExecution_Previews: PreviewProvider {
         ExExecution(
             workout: .constant(AppData().Workouts[0]),
             index: .constant(0),
-            details: .constant(AppData().ExDetails(ex: AppData().Workouts[0].exercises[0])),
+            details: .constant(AppData().ExDetails(sets: AppData().Workouts[0].exercises[0].sets)),
             timer: .constant(Timer.publish(every: 1, on: .main, in: .common).autoconnect())
         )
         .environmentObject(AppData())

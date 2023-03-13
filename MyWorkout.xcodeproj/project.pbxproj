@@ -14,11 +14,12 @@
 		660475EB297002D30060BDA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 660475EA297002D30060BDA4 /* Assets.xcassets */; };
 		660475EE297002D30060BDA4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 660475ED297002D30060BDA4 /* Preview Assets.xcassets */; };
 		660475FB297027C30060BDA4 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660475FA297027C30060BDA4 /* Helper.swift */; };
-		660475FD297035CC0060BDA4 /* ex8.json in Resources */ = {isa = PBXBuildFile; fileRef = 660475FC297035CC0060BDA4 /* ex8.json */; };
+		660475FD297035CC0060BDA4 /* ex9.json in Resources */ = {isa = PBXBuildFile; fileRef = 660475FC297035CC0060BDA4 /* ex9.json */; };
 		660CD48329B0B6B4000CF0A8 /* EditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660CD48229B0B6B4000CF0A8 /* EditButton.swift */; };
 		660CD48529B0FEC1000CF0A8 /* TimerClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660CD48429B0FEC1000CF0A8 /* TimerClock.swift */; };
 		66180B1A29716F13007AD265 /* WorkoutDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66180B1929716F13007AD265 /* WorkoutDetails.swift */; };
 		66180B1C29718A16007AD265 /* ExerciseDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66180B1B29718A16007AD265 /* ExerciseDetails.swift */; };
+		663E7BAA29BDF59C00762262 /* StandAloneTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663E7BA929BDF59C00762262 /* StandAloneTimer.swift */; };
 		664793C329AA777F004A2347 /* BeginWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664793C229AA777F004A2347 /* BeginWorkout.swift */; };
 		6661932229AFD6FA00B7EF86 /* Sets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6661932129AFD6FA00B7EF86 /* Sets.swift */; };
 		6661932429AFDA4400B7EF86 /* WarmingSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6661932329AFDA4400B7EF86 /* WarmingSets.swift */; };
@@ -26,7 +27,7 @@
 		66935293299BA5E500639B11 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66935292299BA5E500639B11 /* AppData.swift */; };
 		6694527A297F2915003EF2EF /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66945279297F2915003EF2EF /* MainView.swift */; };
 		6694527C297F296A003EF2EF /* SettingsDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6694527B297F296A003EF2EF /* SettingsDetails.swift */; };
-		66B4A9082976FECC00572B49 /* workout8.json in Resources */ = {isa = PBXBuildFile; fileRef = 66B4A9072976FECC00572B49 /* workout8.json */; };
+		66B4A9082976FECC00572B49 /* workout9.json in Resources */ = {isa = PBXBuildFile; fileRef = 66B4A9072976FECC00572B49 /* workout9.json */; };
 		66CFE92E297FD3C9007DCAD0 /* ExerciseList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CFE92D297FD3C9007DCAD0 /* ExerciseList.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,11 +40,12 @@
 		660475EA297002D30060BDA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		660475ED297002D30060BDA4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		660475FA297027C30060BDA4 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = SOURCE_ROOT; };
-		660475FC297035CC0060BDA4 /* ex8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ex8.json; sourceTree = SOURCE_ROOT; };
+		660475FC297035CC0060BDA4 /* ex9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ex9.json; sourceTree = SOURCE_ROOT; };
 		660CD48229B0B6B4000CF0A8 /* EditButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditButton.swift; sourceTree = "<group>"; };
 		660CD48429B0FEC1000CF0A8 /* TimerClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerClock.swift; sourceTree = "<group>"; };
 		66180B1929716F13007AD265 /* WorkoutDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetails.swift; sourceTree = "<group>"; };
 		66180B1B29718A16007AD265 /* ExerciseDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetails.swift; sourceTree = "<group>"; };
+		663E7BA929BDF59C00762262 /* StandAloneTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandAloneTimer.swift; sourceTree = "<group>"; };
 		664793BF29AA6DB2004A2347 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		664793C229AA777F004A2347 /* BeginWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeginWorkout.swift; sourceTree = "<group>"; };
 		6661932129AFD6FA00B7EF86 /* Sets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sets.swift; sourceTree = "<group>"; };
@@ -52,7 +54,7 @@
 		66935292299BA5E500639B11 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		66945279297F2915003EF2EF /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		6694527B297F296A003EF2EF /* SettingsDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDetails.swift; sourceTree = "<group>"; };
-		66B4A9072976FECC00572B49 /* workout8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = workout8.json; sourceTree = SOURCE_ROOT; tabWidth = 4; };
+		66B4A9072976FECC00572B49 /* workout9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = workout9.json; sourceTree = SOURCE_ROOT; tabWidth = 4; };
 		66CFE92D297FD3C9007DCAD0 /* ExerciseList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,8 +104,8 @@
 				660CD48129B0B688000CF0A8 /* Elements */,
 				66935290299BA3AD00639B11 /* DataStructures.swift */,
 				660475FA297027C30060BDA4 /* Helper.swift */,
-				660475FC297035CC0060BDA4 /* ex8.json */,
-				66B4A9072976FECC00572B49 /* workout8.json */,
+				660475FC297035CC0060BDA4 /* ex9.json */,
+				66B4A9072976FECC00572B49 /* workout9.json */,
 				660475EA297002D30060BDA4 /* Assets.xcassets */,
 				660475EC297002D30060BDA4 /* Preview Content */,
 			);
@@ -172,6 +174,7 @@
 				664F7B5829BC97DE00F34BEB /* Settings */,
 				6661932629AFDB8700B7EF86 /* WorkoutEdit */,
 				6661932529AFDB3800B7EF86 /* WorkoutStart */,
+				663E7BA929BDF59C00762262 /* StandAloneTimer.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -234,11 +237,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				660475FD297035CC0060BDA4 /* ex8.json in Resources */,
+				660475FD297035CC0060BDA4 /* ex9.json in Resources */,
 				6601D4CF29B3450500B1539D /* LCD.ttf in Resources */,
 				660475EE297002D30060BDA4 /* Preview Assets.xcassets in Resources */,
 				660475EB297002D30060BDA4 /* Assets.xcassets in Resources */,
-				66B4A9082976FECC00572B49 /* workout8.json in Resources */,
+				66B4A9082976FECC00572B49 /* workout9.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +259,7 @@
 				66935293299BA5E500639B11 /* AppData.swift in Sources */,
 				6661932229AFD6FA00B7EF86 /* Sets.swift in Sources */,
 				660475E7297002D20060BDA4 /* MyWorkoutApp.swift in Sources */,
+				663E7BAA29BDF59C00762262 /* StandAloneTimer.swift in Sources */,
 				6661932429AFDA4400B7EF86 /* WarmingSets.swift in Sources */,
 				66180B1A29716F13007AD265 /* WorkoutDetails.swift in Sources */,
 				66180B1C29718A16007AD265 /* ExerciseDetails.swift in Sources */,
