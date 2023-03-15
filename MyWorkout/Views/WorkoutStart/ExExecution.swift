@@ -39,6 +39,31 @@ struct ExExecution: View {
             VStack{
                 Spacer()
                 
+                HStack{
+                    ZStack{
+                        Capsule()
+                            .rotation(.degrees(180))
+                            .fill(Color.darkEnd)
+                            .frame(width: 150)
+                            
+                        ZStack{
+                            Circle()
+                                .fill(warming ? Color.red : Color.green)
+                                .opacity(0.7)
+                            warming ?
+                            Text("🔥").font(.system(size: 50))
+                            :
+                            Text("🏋️").font(.system(size: 50))
+                        }
+                        .frame(height: 60)
+                        .padding(.leading, 80)
+                        
+                    }
+                    .frame(height: 70)
+                    .padding(.leading, -75)
+                    Spacer()
+                }
+                
                 ZStack{
                     //MARK: - Timer
                     TimerClock(time: $time, startTime: .constant(workout.exercises[index].rest))
@@ -100,7 +125,7 @@ struct ExExecution: View {
                                     UNUserNotificationCenter.current().delegate = date
                                     
                                     if workout.exercises[index].rest>0{
-                                        performNotification()
+                                        //performNotification()
                                     }
                                     
                                     generator.notificationOccurred(.success)
@@ -130,24 +155,27 @@ struct ExExecution: View {
                     }
                     .foregroundColor(.black)
                     .font(.system(size: 50))
-                    Circle()
-                        .trim(from: 0.5, to: 1)
-                        .rotation(.degrees(-45))
-                        .stroke(Color.white, lineWidth: 40)
-                        .frame(width: 280, height: 280)
-                        .blur(radius: 10)
-                        .opacity(0.2)
-                        .mask(Circle())
+                    if !timerRunning {
+                        Circle()
+                            .trim(from: 0.5, to: 1)
+                            .rotation(.degrees(-45))
+                            .stroke(Color.white, lineWidth: 40)
+                            .frame(width: 280, height: 280)
+                            .blur(radius: 10)
+                            .opacity(0.2)
+                            .mask(Circle())
+                            
                         
+                        Circle()
+                            .trim(from: 0.5, to: 1)
+                            .rotation(.degrees(135))
+                            .stroke(Color.gray, lineWidth: 40)
+                            .frame(width: 280, height: 280)
+                            .blur(radius: 10)
+                            .opacity(0.4)
+                            .mask(Circle())
+                    }
                     
-                    Circle()
-                        .trim(from: 0.5, to: 1)
-                        .rotation(.degrees(135))
-                        .stroke(Color.gray, lineWidth: 40)
-                        .frame(width: 280, height: 280)
-                        .blur(radius: 10)
-                        .opacity(0.4)
-                        .mask(Circle())
                 }
                 .padding()
                 

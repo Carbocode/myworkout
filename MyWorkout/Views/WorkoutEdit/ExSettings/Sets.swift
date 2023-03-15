@@ -16,86 +16,28 @@ struct Sets: View {
     var index: Int
     @Binding var editMode: EditMode
     
-    @State private var decimal = 0
-    
     let timeArray = (0...300).filter { number -> Bool in
         return number % 10 == 0}
     let weightArray = [0, 5]
     
     var body: some View {
         //Perchantage, Kilograms or Libs
-        let rmWeight: Bool = appData.Workouts[workIndex].exercises[index].rmOrW
+        //let rmWeight: Bool = appData.Workouts[workIndex].exercises[index].rmOrW
         let kgLb: String = (UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg")
-        let kgLbPerc: String = appData.Workouts[workIndex].exercises[index].rmOrW ? "%" : kgLb
+        //let kgLbPerc: String = appData.Workouts[workIndex].exercises[index].rmOrW ? "%" : kgLb
         
         //Sets
         let sets = appData.Workouts[workIndex].exercises[index].sets
         Section{
             ForEach(Array(sets.enumerated()), id: \.element) { i, singleSet in
-                //MARK: - SET
-                DisclosureGroup(
-                    content: {
-                        HStack{
-                            //Sets Number
-                            Picker("Numero di Serie", selection: $appData.Workouts[workIndex].exercises[index].sets[i].nSets){
-                                ForEach((1...20), id: \.self) {
-                                        Text("\($0)")
-                                    }
-                            }
-                            Text("x")
-                            //Reps Number
-                            Picker("Numero di Rep", selection: $appData.Workouts[workIndex].exercises[index].sets[i].reps){
-                                ForEach((1...50), id: \.self) {
-                                        Text("\($0)")
-                                    }
-                            }
-                            //Weight Number
-                            Picker("Peso per ogni Serie", selection: $appData.Workouts[workIndex].exercises[index].sets[i].weight){
-                                ForEach(0...200, id: \.self) {
-                                    Text("\($0)").tag(Double($0))
-                                }
-                            }
-                            if !rmWeight{
-                                Text(",")
-                                //Decimal Weight
-                                Picker("Peso decimale per ogni Serie", selection: $decimal){
-                                    ForEach(weightArray, id: \.self) {
-                                        Text("\($0)").tag($0)
-                                    }
-                                }
-                            }
-                            Text(kgLbPerc)
-                        }
-                        .pickerStyle(WheelPickerStyle())
-                    },
-                    label:{
-                        VStack(alignment: .leading){
-                            HStack{
-                                Text("\(singleSet.nSets) x \(singleSet.reps)")
-                                    .foregroundColor(.black)
-                                    .padding(4)
-                                    .background(Rectangle().cornerRadius(5).foregroundColor(.accentColor))
-                                Spacer()
-                                if rmWeight{
-                                    Text("\(singleSet.weight, specifier: "%.0f")")
-                                }
-                                else{
-                                    Text("\(singleSet.weight, specifier: "%.1f")")
-                                }
-                                Text(kgLbPerc)
-                            }
-                            if appData.debug {
-                                Text(singleSet.id.uuidString).font(.caption2).foregroundColor(.primary)
-                            }
-                        }
-                    }
-                )
+                SingleSet(workIndex: workIndex, index: index, i: i)
             }
             .onDelete(perform: onDelete)
             .onMove(perform: onMove)
             //TODO: Improve 1RM calc
             .onAppear(perform: {
-                appData.Workouts[workIndex].exercises[index].maxWeight = appData.Massimale(sets: sets)})
+                appData.Workouts[workIndex].exercises[index].maxWeight = appData.Massimale(sets: sets)
+            })
         }
         header:{
             HStack{
