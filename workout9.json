@@ -41,8 +41,8 @@
                 "maxWeight": 0.0,
                 "rmOrW": false,
                 "rest": 90,
-                "dropSet": 0,
-                "dropWeight": 0.0,
+                "dropSet": 3,
+                "dropWeight": 5.0,
                 "warmingSets": [],
                 "sets": [
                     {

@@ -69,7 +69,7 @@ struct ExExecution: View {
                     TimerClock(time: $time, startTime: .constant(workout.exercises[index].rest))
                         .onReceive(timer){ time in
                             if timerRunning {
-                                if self.time != workout.exercises[index].rest{
+                                if self.time < workout.exercises[index].rest{
                                     self.time+=1
                                 }else{
                                     AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)){}
@@ -111,7 +111,7 @@ struct ExExecution: View {
                                 .rotation(.degrees(90))
                                 .fill(timerRunning ? Color.gray : Color.accentColor)
                                 .frame(width: 280, height: 280))
-                            .gesture(LongPressGesture(minimumDuration: 0.6)
+                            .gesture(LongPressGesture(minimumDuration: 0.3)
                                 .updating($isDone) { currentState, gestureState, transaction in
                                     gestureState = currentState
                                     generator.notificationOccurred(.success)
@@ -142,7 +142,7 @@ struct ExExecution: View {
                                 .rotation(.degrees(-90))
                                 .fill(timerRunning ? Color.gray : Color.red)
                                 .frame(width: 280, height: 280))
-                            .gesture(LongPressGesture(minimumDuration: 0.6)
+                            .gesture(LongPressGesture(minimumDuration: 0.3)
                             .updating($isFailed) { currentState, gestureState, transaction in
                                 gestureState = currentState
                                 generator.notificationOccurred(.success)
@@ -289,6 +289,11 @@ struct ExExecution: View {
             else{
                 details=appData.ExDetails(sets: workout.exercises[index].sets)
             }
+        }
+        .onChange(of: date.timeDiff){ _ in
+            print(time)
+            time += date.timeDiff
+            print("Changed to \(time)")
         }
         
     }

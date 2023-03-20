@@ -18,6 +18,7 @@ struct SingleSet: View {
     @State private var reps = 0
     @State private var decimal = 0
     @State private var integer = 0
+    @State private var perc = 0
     
     let timeArray = (0...300).filter { number -> Bool in
         return number % 10 == 0}
@@ -32,84 +33,85 @@ struct SingleSet: View {
         let kgLb: String = (UserDefaults.standard.bool(forKey: "imperial") ? "lb" : "Kg")
         let kgLbPerc: String = appData.Workouts[workIndex].exercises[index].rmOrW ? "%" : kgLb
         
-        
-        DisclosureGroup(
-            content: {
-                HStack{
-                    //Sets Number
-                    Picker("Numero di Serie", selection: $nSets){
-                        ForEach((1...20), id: \.self) {
-                                Text("\($0)")
-                            }
-                    }
-                    Text("x")
-                    //Reps Number
-                    Picker("Numero di Rep", selection: $reps){
-                        ForEach((1...50), id: \.self) {
-                                Text("\($0)")
-                            }
-                    }
-                    //Weight Number
-                    Picker("Peso per ogni Serie", selection: $integer) {
-                        ForEach(0...200, id: \.self) {
-                            Text("\($0)").tag(Double($0))
-                        }
-                    }
-                           
-                    if !rmWeight{
-                        Text(",")
-                        //Decimal Weight
-                        Picker("Peso decimale per ogni Serie", selection: $decimal){
-                            ForEach(weightArray, id: \.self) {
-                                Text("\($0)").tag($0)
-                            }
-                        }
-                    }
-                    Text(kgLbPerc)
-                }
-                .pickerStyle(WheelPickerStyle())
-            },
-            label:{
-                VStack(alignment: .leading){
-                    let singleSet = appData.Workouts[workIndex].exercises[index].sets[i]
+        if i < appData.Workouts[workIndex].exercises[index].sets.count {
+            DisclosureGroup(
+                content: {
                     HStack{
-                        Text("\(singleSet.nSets) x \(singleSet.reps)")
-                            .foregroundColor(.black)
-                            .padding(4)
-                            .background(Rectangle().cornerRadius(5).foregroundColor(.accentColor))
-                        Spacer()
-                        if rmWeight{
-                            Text("\(singleSet.weight, specifier: "%.0f")")
+                        //Sets Number
+                        Picker("Numero di Serie", selection: $nSets){
+                            ForEach((1...20), id: \.self) {
+                                    Text("\($0)")
+                                }
                         }
-                        else{
-                            Text("\(singleSet.weight, specifier: "%.1f")")
+                        Text("x")
+                        //Reps Number
+                        Picker("Numero di Rep", selection: $reps){
+                            ForEach((1...50), id: \.self) {
+                                    Text("\($0)")
+                                }
+                        }
+                        //Weight Number
+                        Picker("Peso per ogni Serie", selection: $integer) {
+                            ForEach(0...200, id: \.self) {
+                                Text("\($0)").tag(Double($0))
+                            }
+                        }
+                               
+                        if !rmWeight{
+                            Text(",")
+                            //Decimal Weight
+                            Picker("Peso decimale per ogni Serie", selection: $decimal){
+                                ForEach(weightArray, id: \.self) {
+                                    Text("\($0)").tag($0)
+                                }
+                            }
                         }
                         Text(kgLbPerc)
                     }
-                    if appData.debug {
-                        Text(singleSet.id.uuidString).font(.caption2).foregroundColor(.primary)
+                    .pickerStyle(WheelPickerStyle())
+                },
+                label:{
+                    VStack(alignment: .leading){
+                        let singleSet = appData.Workouts[workIndex].exercises[index].sets[i]
+                        HStack{
+                            Text("\(singleSet.nSets) x \(singleSet.reps)")
+                                .foregroundColor(.black)
+                                .padding(4)
+                                .background(Rectangle().cornerRadius(5).foregroundColor(.accentColor))
+                            Spacer()
+                            Text("\(perc)%").font(rmWeight ? .headline : .subheadline)
+                            Text("\(singleSet.weight, specifier: "%.1f")\(kgLb)").font(rmWeight ? .subheadline : .headline)
+                        }
+                        if appData.debug {
+                            Text(singleSet.id.uuidString).font(.caption2).foregroundColor(.primary)
+                        }
                     }
                 }
+            )
+            .onAppear(){
+                nSets = appData.Workouts[workIndex].exercises[index].sets[i].nSets
+                reps = appData.Workouts[workIndex].exercises[index].sets[i].reps
+                integer = Int(appData.Workouts[workIndex].exercises[index].sets[i].weight)
+                decimal = Int(appData.Workouts[workIndex].exercises[index].sets[i].weight*10)%10
             }
-        )
-        .onAppear(){
-            nSets = appData.Workouts[workIndex].exercises[index].sets[i].nSets
-            reps = appData.Workouts[workIndex].exercises[index].sets[i].reps
-            integer = Int(appData.Workouts[workIndex].exercises[index].sets[i].weight)
-            decimal = Int(appData.Workouts[workIndex].exercises[index].sets[i].weight*10)%10
+            .onChange(of: decimal){ _ in
+                onUpdate(sets: sets)
+            }
+            .onChange(of: integer){ _ in
+                onUpdate(sets: sets)
+                if appData.Workouts[workIndex].exercises[index].maxWeight != 0{
+                    perc=Int(Int(appData.Workouts[workIndex].exercises[index].sets[i].weight)*100/Int(appData.Workouts[workIndex].exercises[index].maxWeight))
+                }
+                
+            }
+            .onChange(of: nSets){ _ in
+                onUpdate(sets: sets)
+            }
+            .onChange(of: reps){ _ in
+                onUpdate(sets: sets)
+            }
         }
-        .onChange(of: decimal){ _ in
-            onUpdate(sets: sets)
-        }
-        .onChange(of: integer){ _ in
-            onUpdate(sets: sets)
-        }
-        .onChange(of: nSets){ _ in
-            onUpdate(sets: sets)
-        }
-        .onChange(of: reps){ _ in
-            onUpdate(sets: sets)
-        }
+        
     }
     
     func onUpdate(sets: [Set]) {

@@ -38,7 +38,7 @@ struct ExerciseDetails: View {
                 //MARK: - Settings
                 Section{
                     //MARK: Peso Massimo
-                    Toggle("Usa %-1RM", isOn: $appData.Workouts[workIndex].exercises[index].rmOrW)
+                    Toggle("Usa %-1RM", isOn: $appData.Workouts[workIndex].exercises[index].rmOrW).disabled(true)
                     if appData.Workouts[workIndex].exercises[index].rmOrW {
                         DisclosureGroup(
                             content: {
@@ -97,7 +97,7 @@ struct ExerciseDetails: View {
                     DisclosureGroup(
                         content: {
                             HStack{
-                                Picker("Ogni quanto ridurre il peso", selection: $appData.Workouts[workIndex].exercises[index].dropSet){
+                                Picker("Quante volte ridurre il peso", selection: $appData.Workouts[workIndex].exercises[index].dropSet){
                                     Text("NO").tag(0)
                                     ForEach(1...25, id: \.self) {
                                         Text("\($0)")
@@ -121,12 +121,12 @@ struct ExerciseDetails: View {
                                 Text("Dropset").foregroundColor(.primary).fontWeight(.none)
                                 Spacer()
                                 if (appData.Workouts[workIndex].exercises[index].dropSet>0){
-                                    Text("Ogni \(appData.Workouts[workIndex].exercises[index].dropSet)")
                                     if(appData.Workouts[workIndex].exercises[index].dropWeight>0){
-                                        Text("-\(appData.Workouts[workIndex].exercises[index].dropWeight, specifier: "%.0f")")
-                                        Text(kgLbPerc)
-                                            
+                                        Text("-\(appData.Workouts[workIndex].exercises[index].dropWeight, specifier: "%.0f")\(kgLbPerc)")
                                     }
+                                    Text("x")
+                                    Text("\(appData.Workouts[workIndex].exercises[index].dropSet)v")
+                                    
                                 }
                                 else{
                                     Text("NO")
@@ -136,7 +136,7 @@ struct ExerciseDetails: View {
                         }
                     )
                     //MARK: Superset
-                    Toggle("Superset", isOn: $appData.Workouts[workIndex].exercises[index].superset)
+                    Toggle("Superset", isOn: $appData.Workouts[workIndex].exercises[index].superset).disabled(true)
                 }
                 header:{
                     HStack{
@@ -171,7 +171,7 @@ struct ExerciseDetails: View {
 
 struct ExerciseDetails_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseDetails(workIndex: 0, index: Binding.constant(0))
+        ExerciseDetails(workIndex: 0, index: Binding.constant(1))
             .environmentObject(AppData())
     }
 }
