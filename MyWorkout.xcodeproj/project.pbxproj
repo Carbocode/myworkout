@@ -30,6 +30,7 @@
 		66B4A9082976FECC00572B49 /* workout9.json in Resources */ = {isa = PBXBuildFile; fileRef = 66B4A9072976FECC00572B49 /* workout9.json */; };
 		66CD186B29C1CA62004B161D /* SingleSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CD186A29C1CA62004B161D /* SingleSet.swift */; };
 		66CFE92E297FD3C9007DCAD0 /* ExerciseList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CFE92D297FD3C9007DCAD0 /* ExerciseList.swift */; };
+		66EECF1D29CB1184006D28BA /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EECF1C29CB1184006D28BA /* SplashScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		66B4A9072976FECC00572B49 /* workout9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = workout9.json; sourceTree = SOURCE_ROOT; tabWidth = 4; };
 		66CD186A29C1CA62004B161D /* SingleSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSet.swift; sourceTree = "<group>"; };
 		66CFE92D297FD3C9007DCAD0 /* ExerciseList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseList.swift; sourceTree = "<group>"; };
+		66EECF1C29CB1184006D28BA /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 			children = (
 				660CD48229B0B6B4000CF0A8 /* EditButton.swift */,
 				660CD48429B0FEC1000CF0A8 /* TimerClock.swift */,
+				66EECF1C29CB1184006D28BA /* SplashScreen.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 				660CD48329B0B6B4000CF0A8 /* EditButton.swift in Sources */,
 				66CFE92E297FD3C9007DCAD0 /* ExerciseList.swift in Sources */,
 				66935291299BA3AD00639B11 /* DataStructures.swift in Sources */,
+				66EECF1D29CB1184006D28BA /* SplashScreen.swift in Sources */,
 				6601D4D129B35C1E00B1539D /* ExExecution.swift in Sources */,
 				664793C329AA777F004A2347 /* BeginWorkout.swift in Sources */,
 				6694527C297F296A003EF2EF /* SettingsDetails.swift in Sources */,

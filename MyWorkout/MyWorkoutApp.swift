@@ -46,6 +46,8 @@ struct MyWorkoutApp: App {
     @StateObject private var appData = AppData()
     @StateObject var date = TimerData()
     
+    @State var isBackground = false
+    
     var body: some Scene {
         WindowGroup {
             MainView()
@@ -56,11 +58,20 @@ struct MyWorkoutApp: App {
             //If in background save the date
             if newScene == .background{
                 date.leftTime = Date()
+                
+                isBackground = true
+                print("BG")
             }
             
             //If returns in foreground returns the Time difference in seconds
-            if newScene == .active{
-                date.timeDiff = Int(Date().timeIntervalSince(date.leftTime))
+            if isBackground{
+                if newScene == .active{
+                    date.timeDiff = Int(Date().timeIntervalSince(date.leftTime))
+                    if date.timeDiff > 0 {
+                        print("Time Enlapsed in BG: \(date.timeDiff)")
+                    }
+                    isBackground=false
+                }
             }
         }
     }

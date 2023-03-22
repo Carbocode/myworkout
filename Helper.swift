@@ -74,6 +74,6 @@ extension Bundle {
         }
 
         // returning the parsed data
-        return jsonURL //TODO: Swiftchare con jsonURL per distribuzione
+        return readURL //TODO: Swiftchare con jsonURL per distribuzione
     }
 }

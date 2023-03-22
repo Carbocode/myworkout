@@ -117,6 +117,8 @@ struct ExExecution: View {
                                     generator.notificationOccurred(.success)
                                 }
                                 .onEnded { value in
+                                    print("\(workout.exercises[index].rest)s Timer Started")
+                                    
                                     timerRunning.toggle()
                                     
                                     UNUserNotificationCenter.current().requestAuthorization(options: [.badge,.sound,.alert])
@@ -148,6 +150,8 @@ struct ExExecution: View {
                                 generator.notificationOccurred(.success)
                             }
                             .onEnded { value in
+                                print("\(workout.exercises[index].rest)s Timer Started")
+                                
                                 timerRunning.toggle()
                                 generator.notificationOccurred(.success)
                             })
@@ -266,6 +270,8 @@ struct ExExecution: View {
         .foregroundColor(.primary)
         .preferredColorScheme(.dark)
         .onAppear{
+            print("New EX Started")
+            
             if !workout.exercises[index].warmingSets.isEmpty{
                 warming=true
             }
@@ -291,9 +297,13 @@ struct ExExecution: View {
             }
         }
         .onChange(of: date.timeDiff){ _ in
-            print(time)
-            time += date.timeDiff
-            print("Changed to \(time)")
+            if timerRunning {
+                print("\nEnlapsed:\t\(time) \t\t+")
+                print("BG Time:\t\(date.timeDiff) \t\t=")
+                print("-------------------")
+                time += date.timeDiff
+                print("\t\t\t\(time)\n")
+            }
         }
         
     }

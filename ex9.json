@@ -36,7 +36,12 @@
     },
     {
         "id": "5a923964-bb66-11ed-afa1-0242ac120002",
-        "name": "Vertical Row Gomiti",
+        "name": "Vertical Row Spalle",
+        "topWeight": 0.0
+    },
+    {
+        "id": "422e7591-6684-4a8d-9fdd-619eb78c7ed6",
+        "name": "Vertical Row Schiena",
         "topWeight": 0.0
     },
     {
@@ -47,6 +52,11 @@
     {
         "id": "6d0e7616-bb66-11ed-afa1-0242ac120002",
         "name": "Lat machine avanti",
+        "topWeight": 0.0
+    },
+    {
+        "id": "e91bf2d2-6be1-4c2f-99e2-db70c52df7cc",
+        "name": "Lat machine dietro",
         "topWeight": 0.0
     },
     {
@@ -76,12 +86,32 @@
     },
     {
         "id": "61d9e3d2-ba76-46e7-aee2-31621991f2c2",
-        "name": "Croci",
+        "name": "Croci Alte",
+        "topWeight": 0.0
+    },
+    {
+        "id": "a40bba3c-c801-11ed-afa1-0242ac120002",
+        "name": "Croci Basse",
         "topWeight": 0.0
     },
     {
         "id": "efc35894-9d91-43b8-bf1c-b4ba074d4485",
         "name": "Push Down",
         "topWeight": 0.0
-    }
+    },
+    {
+        "id": "a8b65d4e-c801-11ed-afa1-0242ac120002",
+        "name": "Alzate Laterali",
+        "topWeight": 0.0
+    },
+    {
+        "id": "aceaed4e-c801-11ed-afa1-0242ac120002",
+        "name": "Alzate Laterali Piegato",
+        "topWeight": 0.0
+    },
+    {
+        "id": "efc35894-9d91-43b8-bf1c-b4ba074d4485",
+        "name": "Push Down",
+        "topWeight": 0.0
+    },
 ]
