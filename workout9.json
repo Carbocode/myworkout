@@ -9,8 +9,8 @@
                 "maxWeight": 0.0,
                 "rmOrW": false,
                 "rest": 10,
-                "dropSet": 0,
-                "dropWeight": 0.0,
+                "dropSet": 3,
+                "dropWeight": 5,
                 "warmingSets": [
                     {
                         "id": "cda15778-bb66-11ed-afa1-0242ac120002",

@@ -38,33 +38,36 @@ struct ExExecution: View {
         NavigationStack{
             VStack{
                 Spacer()
-                
-                HStack{
-                    ZStack{
-                        Capsule()
-                            .rotation(.degrees(180))
-                            .fill(Color.darkEnd)
-                            .frame(width: 150)
-                            
-                        ZStack{
-                            Circle()
-                                .fill(warming ? Color.red : Color.green)
-                                .opacity(0.7)
-                            warming ?
-                            Text("🔥").font(.system(size: 50))
-                            :
-                            Text("🏋️").font(.system(size: 50))
-                        }
-                        .frame(height: 60)
-                        .padding(.leading, 80)
-                        
-                    }
-                    .frame(height: 70)
-                    .padding(.leading, -75)
-                    Spacer()
-                }
-                
                 ZStack{
+                    //MARK: - Badge
+                    VStack{
+                        HStack{
+                            ZStack{
+                                Capsule()
+                                    .rotation(.degrees(180))
+                                    .fill(Color.darkEnd)
+                                    .frame(width: 150)
+                                    
+                                ZStack{
+                                    Circle()
+                                        .fill(warming ? Color.red : Color.green)
+                                        .opacity(0.7)
+                                    warming ?
+                                    Text("🔥").font(.system(size: 40))
+                                    :
+                                    Text("🏋️").font(.system(size: 40))
+                                }
+                                .frame(height: 40)
+                                .padding(.leading, 100)
+                                
+                            }
+                            .frame(height: 50)
+                            .padding(.leading, -95)
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+                    
                     //MARK: - Timer
                     TimerClock(time: $time, startTime: .constant(workout.exercises[index].rest))
                         .onReceive(timer){ time in
@@ -184,63 +187,124 @@ struct ExExecution: View {
                 .padding()
                 
                 if details.count>0{
-                    ZStack{
-                        HStack{
-                            Spacer()
-                            Text("\(details[0].nSets)")
-                                .frame(width: 60, height: 70)
-                                .background(Color.black)
-                            
-                            Spacer()
-                            
+                    VStack{
+                        ZStack{
                             HStack{
-                                Text("\(miniSet)/\(details[1].nSets)")
-                                Text("\(details[1].text)")
-                            }
-                            .frame(width: 170, height: 70)
-                            .background(Color.black)
-                            
-                            Spacer()
-                            
-                            if workout.exercises[index].sets[currentSet].weight > 0 {
+                                Spacer()
+                                Text("\(details[0].nSets)")
+                                    .frame(width: 60, height: 70)
+                                    .background(Color.black)
+                                
+                                Spacer()
+                                
+                                HStack{
+                                    Text("\(miniSet)/\(details[1].nSets)")
+                                    Text("\(details[1].text)")
+                                }
+                                .frame(width: 170, height: 70)
+                                .background(Color.black)
+                                
+                                Spacer()
+                                
                                 VStack(alignment: .trailing){
                                     Text("\(workout.exercises[index].sets[currentSet].weight, specifier: "%.1f")")
                                     Text(kgLb).font(.custom("alarm clock", size: 20))
                                 }
-                                
-                                    .frame(width: 100, height: 70)
-                                    .background(Color.black)
+                                .frame(width: 100, height: 70)
+                                .background(Color.black)
+                                Spacer()
                             }
-                            Spacer()
-                        }
-                        .font(.custom("alarm clock", size: 30))
-                        .textCase(.uppercase)
-                        
-                        
-                        HStack{
-                            Spacer()
-                            Text("SETS")
-                            .frame(width: 60, height: 70)
-                            .background(Color.clear)
+                            .padding(.bottom, -40)
+                            .font(.custom("alarm clock", size: 30))
+                            .textCase(.uppercase)
                             
-                            Spacer()
                             
-                            Text("REPS")
-                                .frame(width: 170, height: 70)
-                                .background(Color.clear)
-                            
-                            Spacer()
-                            
-                            if workout.exercises[index].sets[currentSet].weight > 0 {
+                            HStack{
+                                Spacer()
+                                Text("SETS")
+                                    .frame(width: 60, height: 70)
+                                    .background(Color.clear)
+                                
+                                Spacer()
+                                
+                                Text("REPS")
+                                    .frame(width: 170, height: 70)
+                                    .background(Color.clear)
+                                
+                                Spacer()
+                                
                                 Text("PESO")
                                     .frame(width: 100, height: 70)
                                     .background(Color.clear)
+                                Spacer()
                             }
-                            Spacer()
+                            .padding(.bottom, 30)
+                            .font(.custom("alarm clock", size: 20))
+                            .textCase(.uppercase)
                         }
-                        .padding(.bottom, 70)
-                        .font(.custom("alarm clock", size: 20))
-                        .textCase(.uppercase)
+                        ZStack{
+                            HStack{
+                                Spacer()
+                                Text(" ")
+                                    .frame(width: 60, height: 70)
+                                    .background(Color.black)
+                                
+                                Spacer()
+                                
+                                HStack{
+                                    VStack(alignment: .trailing){
+                                        Text("\(workout.exercises[index].dropSet)x")
+                                        Text("").font(.custom("alarm clock", size: 20))
+                                    }.frame(width: 70, height: 70)
+                                    Spacer()
+                                    VStack(alignment: .trailing){
+                                        Text("-\(workout.exercises[index].dropWeight, specifier: "%.1f")")
+                                        Text(kgLb).font(.custom("alarm clock", size: 20))
+                                    }.frame(width: 100, height: 70)
+                                }
+                                .frame(width: 170, height: 70)
+                                .background(Color.black)
+                                
+                                Spacer()
+                                
+                                VStack(alignment: .trailing){
+                                    Text(" ")
+                                    Text(" ").font(.custom("alarm clock", size: 20))
+                                }
+                                .frame(width: 100, height: 70)
+                                .background(Color.black)
+                                
+                                Spacer()
+                            }
+                            .padding(.bottom, -10)
+                            .font(.custom("alarm clock", size: 30))
+                            .textCase(.uppercase)
+                            
+                            
+                            HStack{
+                                Spacer()
+                                Text(" ")
+                                    .frame(width: 60, height: 70)
+                                    .background(Color.clear)
+                                
+                                Spacer()
+                                
+                                Text("DROPSET")
+                                    .frame(width: 170, height: 70)
+                                    .background(Color.clear)
+                                
+                                Spacer()
+                                
+                                Text(" ")
+                                    .frame(width: 100, height: 70)
+                                    .background(Color.clear)
+                                Spacer()
+                            }
+                            .padding(.bottom, 60)
+                            .font(.custom("alarm clock", size: 20))
+                            .textCase(.uppercase)
+                        }
+                        
                     }.background(Color.darkEnd)
                 }
                 HStack{
